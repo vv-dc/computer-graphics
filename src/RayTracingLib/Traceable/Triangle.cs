@@ -15,9 +15,9 @@ namespace RayTracingLib.Traceable
             this.v2 = v2;
         }
 
-        public bool Intersect(Ray ray, out float distance)
+        public bool Intersect(Ray ray, out HitResult? hitResult)
         {
-            distance = 0;
+            hitResult = null;
 
             var edge1 = v1 - v0;
             var edge2 = v2 - v0;
@@ -47,13 +47,13 @@ namespace RayTracingLib.Traceable
                 return false;
             }
 
-            distance = Vector3.Dot(edge2, qvec) * invDet;
+            var distance = Vector3.Dot(edge2, qvec) * invDet;
             if (distance < 0)
             {
-                distance = 0;
                 return false;
             }
-            // GetNormal() => Vector3.Cross(edge1, edge2);
+            hitResult = new HitResult { distance = distance };
+            hitResult.Normal = Vector3.Cross(edge1, edge2);
             return true;
         }
     }

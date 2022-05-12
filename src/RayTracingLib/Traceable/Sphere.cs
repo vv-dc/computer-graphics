@@ -13,19 +13,17 @@ namespace RayTracingLib.Traceable
             this.radius = radius;
         }
 
-        public bool Intersect(Ray ray, out float distance)
+        public bool Intersect(Ray ray, out HitResult? hitResult)
         {
             var direction = ray.origin - center;
+            hitResult = null;
 
             var halfB = Vector3.Dot(ray.direction, direction);
             var C = direction.LengthSquared() - radius * radius;
 
             var D = halfB * halfB - C;
-            if (D < -EPS)
-            {
-                distance = 0;
-                return false;
-            }
+            if (D < -EPS) return false;
+
             if (D > EPS)
             {
                 var sqrtD = (float)Math.Sqrt(D);
@@ -40,21 +38,16 @@ namespace RayTracingLib.Traceable
                 if (root1 < 0)
                 {
                     root1 = root2;
-                    if (root1 < 0)
-                    {
-                        distance = 0;
-                        return false;
-                    }
+                    if (root1 < 0) return false;
                 }
-                distance = root1;
+                hitResult = new HitResult { distance = root1 };
             }
             else
             {
-                distance = -halfB;
+                hitResult = new HitResult { distance = -halfB };
             }
-            // GetNormal() => ray.GetPoint(distance) - center;
+            hitResult.Normal = ray.GetPoint(hitResult.distance) - center;
             return true;
         }
-
     }
 }

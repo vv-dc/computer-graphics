@@ -54,5 +54,7 @@ namespace RayTracingLib.Numeric
 
         public static float Dot(Vector3 left, Vector3 right) =>
             left.X * right.X + left.Y * right.Y + left.Z * right.Z;
+
+        public override string ToString() => $"Vector3<({X}, {Y}, {Z})>";
     }
 }

@@ -33,8 +33,8 @@ namespace RayTracingLib.Tests.Traceable
         [MemberData(nameof(GetNoIntersectionData))]
         public void NoIntersectionTest(Ray ray)
         {
-            Assert.False(plane.Intersect(ray, out var distance));
-            Assert.Equal(0, distance);
+            Assert.False(plane.Intersect(ray, out var hitResult));
+            Assert.Null(hitResult);
         }
 
         public static IEnumerable<object[]> GetIntersectionData()
@@ -51,8 +51,8 @@ namespace RayTracingLib.Tests.Traceable
         [MemberData(nameof(GetIntersectionData))]
         public void IntersectionTest(Ray ray, float expected)
         {
-            Assert.True(plane.Intersect(ray, out var distance));
-            Assert.Equal(expected, distance, PRECISION);
+            Assert.True(plane.Intersect(ray, out var hitResult));
+            Assert.Equal(expected, hitResult!.distance, PRECISION);
         }
     }
 }

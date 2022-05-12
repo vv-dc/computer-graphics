@@ -13,20 +13,21 @@ namespace RayTracingLib.Traceable
             this.point = point;
         }
 
-        public bool Intersect(Ray ray, out float distance)
+        public bool Intersect(Ray ray, out HitResult? hitResult)
         {
             var dot = Vector3.Dot(ray.direction, normal);
             if (dot > EPS)
             {
                 var direction = ray.origin - point;
-                distance = -Vector3.Dot(normal, direction) / dot;
-                if (distance >= 0)
+                hitResult = new HitResult();
+                hitResult.distance = -Vector3.Dot(normal, direction) / dot;
+                if (hitResult.distance >= 0)
                 {
+                    hitResult.Normal = -normal;
                     return true;
                 }
             }
-            distance = 0;
-            // GetNormal() => -normal;
+            hitResult = null;
             return false;
         }
     }

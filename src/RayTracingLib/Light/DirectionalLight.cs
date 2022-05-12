@@ -1,19 +1,20 @@
 namespace RayTracingLib.Light
 {
     using Numeric;
-    class DirectionalLight
+
+    public class DirectionalLight : Light
     {
         private Vector3 direction;
 
-        DirectionalLight(Vector3 direction)
+        public DirectionalLight(Vector3 direction)
         {
-            this.direction = direction;
+            this.direction = Vector3.Normalize(direction);
         }
 
         public Vector3 Direction
         {
             get => direction;
-            set => Vector3.Normalize(direction);
+            set { direction = Vector3.Normalize(direction); }
         }
     }
 }
