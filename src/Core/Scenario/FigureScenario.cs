@@ -1,11 +1,10 @@
 namespace Core.Scenario
 {
     using Core.Consumer;
-    using RayTracer.Scene;
+    using RayTracer;
     using RayTracer.Renderer;
     using RayTracer.Tracer;
     using RayTracer.Adapter;
-    using RayTracingLib;
     using RayTracingLib.Traceable;
     using RayTracingLib.Numeric;
     using RayTracingLib.Light;

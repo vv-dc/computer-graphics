@@ -2,7 +2,7 @@ namespace RayTracingLib.Light
 {
     using Numeric;
 
-    public class DirectionalLight : Light
+    public class DirectionalLight
     {
         private Vector3 direction;
 

@@ -2,15 +2,15 @@ namespace RayTracer.Tracer
 {
     using RayTracingLib;
     using RayTracingLib.Traceable;
-    using RayTracer.Scene;
+    using RayTracer;
 
     public class BasicTracer : ITracer
     {
         private List<ITraceable> sceneObjects = new();
 
-        public void Init(Scene scene)
+        public void Init(List<ITraceable> sceneObjects)
         {
-            this.sceneObjects = scene.objects;
+            this.sceneObjects = sceneObjects;
         }
 
         public bool Trace(Ray ray, out HitResult? hitResult)

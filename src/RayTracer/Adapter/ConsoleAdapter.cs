@@ -6,9 +6,9 @@ namespace RayTracer.Adapter
 
     public class ConsoleAdapter : IAdapter<double?>
     {
-        public double? Adapt(Light light, HitResult hitResult)
+        public double? Adapt(DirectionalLight light, HitResult hitResult)
         {
-            float value = -Vector3.Dot((light as DirectionalLight).Direction, hitResult.Normal);
+            float value = -Vector3.Dot(light.Direction, hitResult.Normal);
             return value;
         }
     }

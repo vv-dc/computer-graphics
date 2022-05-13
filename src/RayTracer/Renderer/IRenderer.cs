@@ -1,7 +1,7 @@
 namespace RayTracer.Renderer
 {
     using RayTracingLib;
-    using RayTracer.Scene;
+    using RayTracer;
 
     public interface IRenderer<PixelType>
     {

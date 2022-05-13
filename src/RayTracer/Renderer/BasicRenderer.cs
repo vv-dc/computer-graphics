@@ -1,7 +1,6 @@
 namespace RayTracer.Renderer
 {
     using RayTracingLib;
-    using RayTracer.Scene;
     using RayTracer.Tracer;
     using RayTracer.Adapter;
 
@@ -19,7 +18,7 @@ namespace RayTracer.Renderer
 
         public Image<PixelType> Render(Scene scene)
         {
-            tracer.Init(scene);
+            tracer.Init(scene.objects);
             Camera camera = scene.camera;
 
             int width = camera.width;
