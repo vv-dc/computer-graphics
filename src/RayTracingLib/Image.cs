@@ -18,5 +18,9 @@ namespace RayTracingLib
             get => pixels[x, y];
             set => pixels[x, y] = value;
         }
+
+        public PixelType[,] AsMatrix() {
+            return this.pixels;
+        }
     }
 }
