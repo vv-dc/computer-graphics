@@ -1,10 +1,13 @@
 namespace Core
 {
+    using Core.Scenario;
+
     public class Program
     {
         public static void Main(string[] args)
         {
-            System.Console.WriteLine("Hello, world!");
+            var scenario = new FigureScenario();
+            scenario.Run(args);
         }
     }
 }
