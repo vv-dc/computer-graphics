@@ -3,7 +3,7 @@ namespace Core.Consumer
     using System.Text;
     using RayTracingLib;
 
-    class ConsoleConsumer : IConsumer<double?>
+    public class ConsoleConsumer : IConsumer<double?>
     {
         public void Consume(Image<double?> image, string? target)
         {
