@@ -5,6 +5,7 @@ namespace RayTracingLib
     public class HitResult
     {
         public float distance;
+        public Ray ray;
         private Vector3 normal;
 
         public Vector3 Normal

@@ -13,7 +13,7 @@ namespace RayTracingLib.Tests.Traceable
 
         public PlaneTests()
         {
-            plane = new Plane(new Vector3(1), new Vector3(1));
+            plane = new Plane(new Vector3(1), new Point3(1));
         }
 
         public static void AssertNoIntersection(Plane plane, Ray ray)
@@ -25,28 +25,28 @@ namespace RayTracingLib.Tests.Traceable
         [Fact]
         public void PlaneInOppositeDirection()
         {
-            var ray = new Ray(new Vector3(0), new Vector3(-1));
+            var ray = new Ray(new Point3(0), new Vector3(-1));
             AssertNoIntersection(plane, ray);
         }
 
         [Fact]
         public void RayParalellToPlane()
         {
-            var ray = new Ray(new Vector3(0), new Vector3(-1, 1, 0));
+            var ray = new Ray(new Point3(0), new Vector3(-1, 1, 0));
             AssertNoIntersection(plane, ray);
         }
 
         [Fact]
         public void RayLiesOnPlane()
         {
-            var ray = new Ray(new Vector3(0, 0, 3), new Vector3(1, -1, 0));
+            var ray = new Ray(new Point3(0, 0, 3), new Vector3(1, -1, 0));
             AssertNoIntersection(plane, ray);
         }
 
         [Fact]
         public void RayOriginLiesOnPlane()
         {
-            var ray = new Ray(new Vector3(3, 0, 0), new Vector3(1, 0, 1));
+            var ray = new Ray(new Point3(3, 0, 0), new Vector3(1, 0, 1));
             AssertNoIntersection(plane, ray);
         }
 
@@ -59,7 +59,7 @@ namespace RayTracingLib.Tests.Traceable
         [Fact]
         public void RayIntersectsPlane()
         {
-            var ray = new Ray(new Vector3(0), new Vector3(1));
+            var ray = new Ray(new Point3(0), new Vector3(1));
             var distance = (float)Math.Sqrt(3);
             AssertIntersection(plane, ray, distance);
         }

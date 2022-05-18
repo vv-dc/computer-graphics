@@ -45,7 +45,7 @@ namespace RayTracer.Tests.Renderer
         [Fact]
         public void EmptyImageConsoleRender()
         {
-            var camera = new Camera(2, 2, 30, new Vector3(0, 0, 0), new Vector3(0, 0, -1));
+            var camera = new Camera(2, 2, 30, new Point3(0), new Vector3(0, 0, -1));
             var scene = new Scene(camera)
             {
                 Light = new DirectionalLight(new Vector3(0, 0, -1))
@@ -59,7 +59,7 @@ namespace RayTracer.Tests.Renderer
             Assert.NotNull(image);
 
             var actualPixels = image.AsMatrix();
-            var bg = ConsoleAdapter.background;
+            var bg = Intensity.Background;
             var expectedPixels = new Intensity[,] { { bg, bg }, { bg, bg } };
             Assert.Equal(expectedPixels, actualPixels, new MatrixComparator());
         }
@@ -67,7 +67,7 @@ namespace RayTracer.Tests.Renderer
         [Fact]
         public void SphereImageConsoleRender()
         {
-            var camera = new Camera(4, 4, 30, new Vector3(0, 0, 0), new Vector3(0, 0, -1));
+            var camera = new Camera(4, 4, 30, new Point3(0), new Vector3(0, 0, -1));
             var scene = new Scene(camera)
             {
                 Light = new DirectionalLight(new Vector3(0, 0, -1))
@@ -76,14 +76,14 @@ namespace RayTracer.Tests.Renderer
             var adapter = new ConsoleAdapter();
             var renderer = new BasicRenderer<Intensity>(tracer, adapter);
 
-            var sphere = new Sphere(new Vector3(-0.2f, 0.2f, -3), 0.5f);
+            var sphere = new Sphere(new Point3(-0.2f, 0.2f, -3), 0.5f);
             scene.AddObject(sphere);
 
             var image = renderer.Render(scene);
             Assert.NotNull(image);
 
             var actualPixels = image.AsMatrix();
-            var bg = ConsoleAdapter.background;
+            var bg = Intensity.Background;
             var expectedPixels = new Intensity[,] {
                 { bg,     0.754f, bg,     bg },
                 { 0.754f, 0.995f, 0.650f, bg },

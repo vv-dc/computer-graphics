@@ -27,7 +27,7 @@ namespace RayTracer.Renderer
                 for (var x = 0; x < image.Width; ++x)
                 {
                     Ray ray = camera.CastRay(x, y);
-                    HitResult? hitResult = tracer.Trace(ray);
+                    tracer.Trace(ray, out var hitResult);
                     image[y, x] = adapter.Adapt(scene.Light, hitResult);
                 }
             }

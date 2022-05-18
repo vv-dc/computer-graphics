@@ -2,6 +2,8 @@ namespace RayTracingLib
 {
     public struct Intensity
     {
+        public static readonly Intensity Background = -3;
+
         private readonly float value;
 
         public Intensity(float value)

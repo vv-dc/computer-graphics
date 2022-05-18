@@ -14,9 +14,9 @@ namespace RayTracingLib.Tests.Traceable
         public TriangleTests()
         {
             triangle = new Triangle(
-                new Vector3(1, 0, 0), // A (v0)
-                new Vector3(0, 0, 1), // B (v1)
-                new Vector3(0, 1, 0)  // C (v2)
+                new Point3(1, 0, 0), // A (v0)
+                new Point3(0, 0, 1), // B (v1)
+                new Point3(0, 1, 0)  // C (v2)
             ); // look at origin
         }
 
@@ -29,21 +29,21 @@ namespace RayTracingLib.Tests.Traceable
         [Fact]
         public void TriangleInOppositeDirection()
         {
-            var ray = new Ray(new Vector3(5), new Vector3(1));
+            var ray = new Ray(new Point3(5), new Vector3(1));
             AssertNoIntersection(triangle, ray);
         }
 
         [Fact]
         public void RayPassesNearTriangleEdge()
         {
-            var ray = new Ray(new Vector3(0), new Vector3(1, -1E-3f, 1));
+            var ray = new Ray(new Point3(0), new Vector3(1, -1E-3f, 1));
             AssertNoIntersection(triangle, ray);
         }
 
         [Fact]
         public void RayLookInAnotherDirection()
         {
-            var ray = new Ray(new Vector3(0), new Vector3(-1, 1, 1));
+            var ray = new Ray(new Point3(0), new Vector3(-1, 1, 1));
             AssertNoIntersection(triangle, ray);
         }
 
@@ -56,7 +56,7 @@ namespace RayTracingLib.Tests.Traceable
         [Fact]
         public void RayIntersectsTriangleEdge()
         {
-            var ray = new Ray(new Vector3(0), new Vector3(1, 1, 0));
+            var ray = new Ray(new Point3(0), new Vector3(1, 1, 0));
             var distance = 1 / (float)Math.Sqrt(2);
             AssertIntersection(triangle, ray, distance);
         }
@@ -64,7 +64,7 @@ namespace RayTracingLib.Tests.Traceable
         [Fact]
         public void RayIntersectsTriangleVertex()
         {
-            var ray = new Ray(new Vector3(0), new Vector3(1, 0, 0));
+            var ray = new Ray(new Point3(0), new Vector3(1, 0, 0));
             var distance = 1F;
             AssertIntersection(triangle, ray, distance);
         }
@@ -72,7 +72,7 @@ namespace RayTracingLib.Tests.Traceable
         [Fact]
         public void RayIntersectsTriangleSurface()
         {
-            var ray = new Ray(new Vector3(0), new Vector3(1));
+            var ray = new Ray(new Point3(0), new Vector3(1));
             var distance = 1 / (float)Math.Sqrt(3);
             AssertIntersection(triangle, ray, distance);
         }

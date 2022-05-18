@@ -4,11 +4,11 @@ namespace RayTracingLib.Traceable
     public class Disk : ITraceable
     {
         private Vector3 normal;
-        private Vector3 center;
+        private Point3 center;
         private float radius;
         private Plane plane;
 
-        public Disk(Vector3 normal, Vector3 center, float radius)
+        public Disk(Vector3 normal, Point3 center, float radius)
         {
             this.normal = normal;
             this.center = center;
@@ -23,6 +23,7 @@ namespace RayTracingLib.Traceable
                 var point = ray.GetPoint(hitResult!.distance);
                 if ((point - center).LengthSquared() < radius * radius)
                 {
+                    hitResult.ray = ray;
                     hitResult.Normal -= normal;
                     return true;
                 }

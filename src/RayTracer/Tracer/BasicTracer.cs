@@ -12,9 +12,9 @@ namespace RayTracer.Tracer
             this.sceneObjects = sceneObjects;
         }
 
-        public HitResult? Trace(Ray ray)
+        public bool Trace(Ray ray, out HitResult? hitResult)
         {
-            HitResult? hitResult = null;
+            hitResult = null;
             foreach (var sceneObject in sceneObjects)
             {
                 if (sceneObject.Intersect(ray, out HitResult? currentHit))
@@ -26,7 +26,7 @@ namespace RayTracer.Tracer
                     hitResult = currentHit;
                 }
             }
-            return hitResult;
+            return hitResult is not null;
         }
     }
 }

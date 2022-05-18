@@ -16,7 +16,7 @@ namespace Core.Scenario
         {
             var camera = new Camera(
                 90, 90, 60,
-                new Vector3(0, 0, 0),
+                new Point3(0, 0, 0),
                 new Vector3(0, 0, -1)
             );
 
@@ -25,28 +25,28 @@ namespace Core.Scenario
                 Light = new DirectionalLight(new Vector3(1, -1, -1))
             };
 
-            var sphere = new Sphere(new Vector3(0, 0, -2.5f), 1f);
+            var sphere = new Sphere(new Point3(0, 0, -2.5f), 1f);
             scene.AddObject(sphere);
 
-            // var sphere = new Sphere(new Vector3(0, 0, -1.25f), 0.5f);
+            // var sphere = new Sphere(new Point3(0, 0, -1.25f), 0.5f);
             // scene.AddObject(sphere);
 
-            // var cylinder = new Cylinder(new Vector3(0, 1, -3), new Vector3(0, 2, -3.5f), 0.5f);
+            // var cylinder = new Cylinder(new Point3(0, 1, -3), new Point3(0, 2, -3.5f), 0.5f);
             // scene.AddObject(cylinder);
 
-            // var cylinder = new Cylinder(new Vector3(0, -1, -3), new Vector3(0, 0, -5), 0.5f);
+            // var cylinder = new Cylinder(new Point3(0, -1, -3), new Point3(0, 0, -5), 0.5f);
             // scene.AddObject(cylinder);
 
-            // var plane = new Plane(new Vector3(0, -1, -1E-6F), new Vector3(0, 0, -3));
+            // var plane = new Plane(new Vector3(0, -1, -1E-6F), new Point3(0, 0, -3));
             // scene.AddObject(plane);
 
-            // var disk = new Disk(new Vector3(0, -1, -0.25f), new Vector3(0, 0, -4), 2f);
+            // var disk = new Disk(new Vector3(0, -1, -0.25f), new Point3(0, 0, -4), 2f);
             // scene.AddObject(disk);
 
             var triangle = new Triangle(
-                new Vector3(-4f, 0, -2.5f),
-                new Vector3(1, -0.5f, -1.25f),
-                new Vector3(8, 0.25f, -8)
+                new Point3(-4f, 0, -2.5f),
+                new Point3(1, -0.5f, -1.25f),
+                new Point3(8, 0.25f, -8)
             );
             scene.AddObject(triangle);
 

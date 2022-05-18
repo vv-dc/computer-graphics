@@ -2,7 +2,6 @@ namespace Core.Consumer
 {
     using System.Text;
 
-    using RayTracer.Adapter;
     using RayTracingLib;
 
     public class ConsoleConsumer : IConsumer<Intensity>
@@ -32,7 +31,7 @@ namespace Core.Consumer
 
         private char MapCharacter(float value)
         {
-            if (Math.Abs(value - ConsoleAdapter.background) < Consts.EPS) return '-'; // background
+            if (Math.Abs(value - Intensity.Background) < Consts.EPS) return '-'; // background
             if (value < -Consts.EPS) return ' '; // 0
             if (value < 0.2) return '.';
             if (value < 0.5) return '*';

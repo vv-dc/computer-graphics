@@ -9,10 +9,10 @@ namespace RayTracer
         public readonly int height;
         private float fov;
         public float AspectRatio => width / (float)height;
-        private readonly Vector3 point;
+        private readonly Point3 point;
         private readonly Vector3 direction;
 
-        public Camera(int width, int height, float fov, Vector3 point, Vector3 direction)
+        public Camera(int width, int height, float fov, Point3 point, Vector3 direction)
         {
             this.width = width;
             this.height = height;

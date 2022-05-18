@@ -3,11 +3,11 @@ namespace RayTracingLib.Traceable
     using Numeric;
     public class Triangle : ITraceable
     {
-        private Vector3 v0; // A
-        private Vector3 v1; // B
-        private Vector3 v2; // C
+        private Point3 v0; // A
+        private Point3 v1; // B
+        private Point3 v2; // C
 
-        public Triangle(Vector3 v0, Vector3 v1, Vector3 v2)
+        public Triangle(Point3 v0, Point3 v1, Point3 v2)
         {
             this.v0 = v0;
             this.v1 = v1;
@@ -51,7 +51,12 @@ namespace RayTracingLib.Traceable
             {
                 return false;
             }
-            hitResult = new HitResult { distance = distance, Normal = Vector3.Cross(edge1, edge2) };
+            hitResult = new HitResult
+            {
+                distance = distance,
+                ray = ray,
+                Normal = Vector3.Cross(edge1, edge2)
+            };
             return true;
         }
     }

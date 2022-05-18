@@ -4,9 +4,9 @@ namespace RayTracingLib.Traceable
     public class Plane : ITraceable
     {
         private Vector3 normal;
-        private Vector3 point;
+        private Point3 point;
 
-        public Plane(Vector3 normal, Vector3 point)
+        public Plane(Vector3 normal, Point3 point)
         {
             this.normal = normal;
             this.point = point;
@@ -21,7 +21,12 @@ namespace RayTracingLib.Traceable
                 var distance = -Vector3.Dot(normal, direction) / dot;
                 if (distance > 0)
                 {
-                    hitResult = new HitResult() { distance = distance, Normal = -normal };
+                    hitResult = new HitResult()
+                    {
+                        distance = distance,
+                        ray = ray,
+                        Normal = -normal
+                    };
                     return true;
                 }
             }

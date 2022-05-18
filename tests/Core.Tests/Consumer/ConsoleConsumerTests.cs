@@ -2,7 +2,6 @@ namespace Core.Tests.Consumer
 {
     using Xunit;
 
-    using RayTracer.Adapter;
     using RayTracingLib;
     using Core.Consumer;
 
@@ -13,7 +12,7 @@ namespace Core.Tests.Consumer
         {
             var consumer = new ConsoleConsumer();
             var image = new Image<Intensity>(3, 3);
-            var bg = ConsoleAdapter.background;
+            var bg = Intensity.Background;
             image[0, 0] = bg;
             image[0, 1] = -0.95f;
             image[0, 2] = 0.1f;

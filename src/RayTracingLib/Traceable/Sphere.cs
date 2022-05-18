@@ -3,10 +3,10 @@ namespace RayTracingLib.Traceable
     using Numeric;
     public class Sphere : ITraceable
     {
-        private Vector3 center;
+        private Point3 center;
         private float radius;
 
-        public Sphere(Vector3 center, float radius)
+        public Sphere(Point3 center, float radius)
         {
             this.center = center;
             this.radius = radius;
@@ -55,6 +55,7 @@ namespace RayTracingLib.Traceable
             hitResult = new HitResult()
             {
                 distance = distance,
+                ray = ray,
                 Normal = ray.GetPoint(distance) - center,
             };
             return true;
