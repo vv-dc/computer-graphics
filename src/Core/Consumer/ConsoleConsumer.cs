@@ -32,7 +32,7 @@ namespace Core.Consumer
         private char MapCharacter(float value)
         {
             if (Math.Abs(value - Intensity.Background) < Consts.EPS) return '-'; // background
-            if (value < -Consts.EPS) return ' '; // 0
+            if (value < Consts.EPS) return ' '; // 0 
             if (value < 0.2) return '.';
             if (value < 0.5) return '*';
             if (value < 0.8) return 'O';

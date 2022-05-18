@@ -15,7 +15,7 @@ namespace Core.Scenario
         public void Run(string[] args)
         {
             var camera = new Camera(
-                90, 90, 60,
+                95, 35, 60,
                 new Point3(0, 0, 0),
                 new Vector3(0, 0, -1)
             );
@@ -28,13 +28,13 @@ namespace Core.Scenario
             var sphere = new Sphere(new Point3(0, 0, -2.5f), 1f);
             scene.AddObject(sphere);
 
-            // var sphere = new Sphere(new Point3(0, 0, -1.25f), 0.5f);
+            // var sphere = new Sphere(new Point3(0, 0, -1.25f), 3f);
             // scene.AddObject(sphere);
 
-            // var cylinder = new Cylinder(new Point3(0, 1, -3), new Point3(0, 2, -3.5f), 0.5f);
+            // var cylinder = new Cylinder(new Point3(0, -1, -3), new Point3(0, 1, -3), 0.5f);
             // scene.AddObject(cylinder);
 
-            // var cylinder = new Cylinder(new Point3(0, -1, -3), new Point3(0, 0, -5), 0.5f);
+            // var cylinder = new Cylinder(new Point3(0, -1, -3), new Point3(0, 1, -5), 1);
             // scene.AddObject(cylinder);
 
             // var plane = new Plane(new Vector3(0, -1, -1E-6F), new Point3(0, 0, -3));
@@ -51,7 +51,9 @@ namespace Core.Scenario
             scene.AddObject(triangle);
 
             var tracer = new BasicTracer();
-            var adapter = new ConsoleAdapter();
+            // var adapter = new ConsoleAdapter();
+            var shadowTracer = new FirstHitTracer();
+            var adapter = new ConsoleShadowAdapter(shadowTracer);
             var renderer = new BasicRenderer<Intensity>(tracer, adapter);
 
             var image = renderer.Render(scene);

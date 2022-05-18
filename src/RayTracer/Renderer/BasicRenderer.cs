@@ -19,9 +19,11 @@ namespace RayTracer.Renderer
         public Image<PixelType> Render(Scene scene)
         {
             tracer.Init(scene.objects);
-            Camera camera = scene.camera;
+            adapter.Init(scene.objects);
 
+            Camera camera = scene.camera;
             var image = new Image<PixelType>(camera.width, camera.height);
+
             for (var y = 0; y < image.Height; ++y)
             {
                 for (var x = 0; x < image.Width; ++x)
