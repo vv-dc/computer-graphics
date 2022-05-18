@@ -8,13 +8,9 @@ namespace RayTracer
         public readonly int width;
         public readonly int height;
         private float fov;
-
         public float AspectRatio => width / (float)height;
-
         private readonly Vector3 point;
-
         private readonly Vector3 direction;
-
 
         public Camera(int width, int height, float fov, Vector3 point, Vector3 direction)
         {
@@ -27,11 +23,16 @@ namespace RayTracer
 
         public Ray CastRay(int x, int y)
         {
-            float angle = (float)Math.Tan(Math.PI * 0.5f * fov / 180.0);
-            float xx = (2 * ((x + 0.5f) / width) - 1) * angle * AspectRatio;
-            float yy = (1 - 2 * ((y + 0.5f) / height)) * angle;
+            float fovScale = (float)Math.Tan(Consts.RadToDeg * fov / 2);
 
-            Vector3 rayDir = Vector3.Normalize(new Vector3(xx, yy, -1));
+            // from -1 to 1, square, origin in the center
+            float xxScreen = (2 * ((x + 0.5f) / width) - 1);
+            float yyScreen = (1 - 2 * ((y + 0.5f) / height));
+
+            float xx = xxScreen * fovScale * AspectRatio;
+            float yy = yyScreen * fovScale;
+
+            var rayDir = new Vector3(xx, yy, -1); // TODO: change -1
             return new Ray(point, rayDir);
         }
     }

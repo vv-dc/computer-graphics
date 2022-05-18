@@ -3,7 +3,6 @@ namespace RayTracingLib.Traceable
     using Numeric;
     public class Sphere : ITraceable
     {
-        private const float EPS = 1E-6F;
         private Vector3 center;
         private float radius;
 
@@ -22,9 +21,12 @@ namespace RayTracingLib.Traceable
             var C = direction.LengthSquared() - radius * radius;
 
             var D = halfB * halfB - C;
-            if (D < -EPS) return false;
-
-            if (D > EPS)
+            if (D < -Consts.EPS)
+            {
+                return false;
+            }
+            float distance;
+            if (D > Consts.EPS)
             {
                 var sqrtD = (float)Math.Sqrt(D);
 
@@ -35,18 +37,26 @@ namespace RayTracingLib.Traceable
                 {
                     (root1, root2) = (root2, root1);
                 }
-                if (root1 < 0)
+                if (root1 < Consts.EPS)
                 {
                     root1 = root2;
-                    if (root1 < 0) return false;
+                    if (root1 < Consts.EPS) return false;
                 }
-                hitResult = new HitResult { distance = root1 };
+                distance = root1;
             }
             else
             {
-                hitResult = new HitResult { distance = -halfB };
+                distance = -halfB;
+                if (distance < Consts.EPS)
+                {
+                    return false;
+                }
             }
-            hitResult.Normal = ray.GetPoint(hitResult.distance) - center;
+            hitResult = new HitResult()
+            {
+                distance = distance,
+                Normal = ray.GetPoint(distance) - center,
+            };
             return true;
         }
     }

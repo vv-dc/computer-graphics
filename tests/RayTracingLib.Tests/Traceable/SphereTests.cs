@@ -1,15 +1,14 @@
 namespace RayTracingLib.Tests.Traceable
 {
     using System;
-    using System.Collections.Generic;
     using Xunit;
 
+    using RayTracingLib;
     using RayTracingLib.Traceable;
     using RayTracingLib.Numeric;
 
     public class SphereTests
     {
-        private const int PRECISION = 6;
         private readonly Sphere sphere;
 
         public SphereTests()
@@ -17,47 +16,69 @@ namespace RayTracingLib.Tests.Traceable
             sphere = new Sphere(new Vector3(1), 3);
         }
 
-        public static IEnumerable<object[]> GetNoIntersectionData()
-        {
-            yield return new object[] {
-                new Ray(new Vector3(5), new Vector3(1)) }; // the sphere is in opposite direction, roots are negative
-
-            yield return new object[] {
-                new Ray(new Vector3(5), new Vector3(0, 0, 1)) }; // the line the ray lies on does not intersect the sphere
-        }
-
-        [Theory]
-        [MemberData(nameof(GetNoIntersectionData))]
-        public void NoIntersectionTest(Ray ray)
+        public static void AssertNoIntersection(Sphere sphere, Ray ray)
         {
             Assert.False(sphere.Intersect(ray, out var hitResult));
             Assert.Null(hitResult);
         }
 
-        public static IEnumerable<object[]> GetIntersectionData()
+        [Fact]
+        public void SphereInOppositeDirection()
         {
-            yield return new object[] {
-                new Ray(new Vector3(0, 0, -2), new Vector3(1, 1, 0)), Math.Sqrt(2) }; // 1 intersection point
-
-            yield return new object[] {
-                new Ray(new Vector3(-3), new Vector3(1)), 4 * Math.Sqrt(3) - 3 }; // 2 intersection points
-
-            yield return new object[] {
-                new Ray(new Vector3(0), new Vector3(1)), 3 + Math.Sqrt(3) }; // the ray origin is inside the sphere
-
-            yield return new object[] {
-                new Ray(new Vector3(1, 1, 4), new Vector3(0, 0, -1)), 0 }; // the ray origin lies on sphere, the ray looks inside the sphere
-
-            yield return new object[] {
-                new Ray(new Vector3(1, 1, 4), new Vector3(1)), 0 }; // the ray origin lies on sphere, the ray looks outside of the sphere
+            var ray = new Ray(new Vector3(5), new Vector3(1));
+            AssertNoIntersection(sphere, ray);
         }
 
-        [Theory]
-        [MemberData(nameof(GetIntersectionData))]
-        public void IntersectionTest(Ray ray, float expected)
+        [Fact]
+        public void RayLineDoesNotIntersectSphere()
+        {
+            var ray = new Ray(new Vector3(5), new Vector3(0, 0, 1));
+            AssertNoIntersection(sphere, ray);
+        }
+
+        [Fact]
+        public void RayOriginLiesOnSphereAndRayLookOutside()
+        {
+            var ray = new Ray(new Vector3(1, 1, 4), new Vector3(1));
+            AssertNoIntersection(sphere, ray);
+        }
+
+        public static void AssertIntersection(Sphere sphere, Ray ray, float distance)
         {
             Assert.True(sphere.Intersect(ray, out var hitResult));
-            Assert.Equal(expected, hitResult!.distance, PRECISION);
+            Assert.Equal(distance, hitResult!.distance, Consts.PRECISION);
+        }
+
+        [Fact]
+        public void OneIntersectionPoint()
+        {
+            var ray = new Ray(new Vector3(0, 0, -2), new Vector3(1, 1, 0));
+            var distance = (float)Math.Sqrt(2);
+            AssertIntersection(sphere, ray, distance);
+        }
+
+        [Fact]
+        public void TwoIntersectionPoints()
+        {
+            var ray = new Ray(new Vector3(-3), new Vector3(1));
+            var distance = 4 * (float)Math.Sqrt(3) - 3;
+            AssertIntersection(sphere, ray, distance);
+        }
+
+        [Fact]
+        public void RayOriginInsideSphere()
+        {
+            var ray = new Ray(new Vector3(0), new Vector3(1));
+            var distance = 3 + (float)Math.Sqrt(3);
+            AssertIntersection(sphere, ray, distance);
+        }
+
+        [Fact]
+        public void RayOriginLiesOnSphereAndRayLookInside()
+        {
+            var ray = new Ray(new Vector3(1, 1, 4), new Vector3(0, 0, -1));
+            var distance = 6F;
+            AssertIntersection(sphere, ray, distance);
         }
     }
 }

@@ -18,9 +18,8 @@ namespace RayTracer.Tests.Tracer
             var ray = new Ray(new Vector3(0, 0, 0), new Vector3(0, 0, -1));
             var tracer = new BasicTracer(); // no scene objects
 
-            bool isTrace = tracer.Trace(ray, out HitResult? hitResult);
+            HitResult? hitResult = tracer.Trace(ray);
 
-            Assert.False(isTrace);
             Assert.Null(hitResult);
         }
 
@@ -34,9 +33,8 @@ namespace RayTracer.Tests.Tracer
             };
             tracer.Init(sceneObjects);
 
-            bool isTrace = tracer.Trace(ray, out HitResult? hitResult);
+            HitResult? hitResult = tracer.Trace(ray);
 
-            Assert.False(isTrace);
             Assert.Null(hitResult);
         }
 
@@ -51,11 +49,9 @@ namespace RayTracer.Tests.Tracer
             };
             tracer.Init(sceneObjects);
 
-            bool isTrace = tracer.Trace(ray, out HitResult? hitResult);
+            HitResult? hitResult = tracer.Trace(ray);
 
-            Assert.True(isTrace);
             Assert.NotNull(hitResult);
-
             Assert.Equal(1, hitResult!.distance); // distance to sphere surface (r)
             var expectedNormal = ray.GetPoint(hitResult!.distance) - new Vector3(0, 0, 0); // first sphere
             Assert.True(hitResult.Normal == expectedNormal);

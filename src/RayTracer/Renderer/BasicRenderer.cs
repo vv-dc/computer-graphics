@@ -21,22 +21,16 @@ namespace RayTracer.Renderer
             tracer.Init(scene.objects);
             Camera camera = scene.camera;
 
-            int width = camera.width;
-            int height = camera.height;
-            var image = new Image<PixelType>(width, height);
-
-            for (var y = 0; y < height; ++y)
+            var image = new Image<PixelType>(camera.width, camera.height);
+            for (var y = 0; y < image.Height; ++y)
             {
-                for (var x = 0; x < width; ++x)
+                for (var x = 0; x < image.Width; ++x)
                 {
-                    Ray newRay = camera.CastRay(x, y);
-                    if (tracer.Trace(newRay, out HitResult? hitResult))
-                    {
-                        image[y, x] = adapter.Adapt(scene.Light, hitResult!);
-                    }
+                    Ray ray = camera.CastRay(x, y);
+                    HitResult? hitResult = tracer.Trace(ray);
+                    image[y, x] = adapter.Adapt(scene.Light, hitResult);
                 }
             }
-
             return image;
         }
     }

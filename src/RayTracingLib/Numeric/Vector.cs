@@ -2,7 +2,6 @@ namespace RayTracingLib.Numeric
 {
     public class Vector3
     {
-        private const float EPS = 1E-6F;
         public float X { get; }
         public float Y { get; }
         public float Z { get; }
@@ -37,7 +36,7 @@ namespace RayTracingLib.Numeric
             new(value.X / factor, value.Y / factor, value.Z / factor);
 
         public static bool operator ==(Vector3 left, Vector3 right) =>
-            (left - right).LengthSquared() < EPS * EPS;
+            (left - right).LengthSquared() < Consts.EPS * Consts.EPS;
 
         public static bool operator !=(Vector3 left, Vector3 right) =>
             !(left == right);

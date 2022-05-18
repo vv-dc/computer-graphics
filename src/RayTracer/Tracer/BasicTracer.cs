@@ -2,7 +2,6 @@ namespace RayTracer.Tracer
 {
     using RayTracingLib;
     using RayTracingLib.Traceable;
-    using RayTracer;
 
     public class BasicTracer : ITracer
     {
@@ -13,21 +12,21 @@ namespace RayTracer.Tracer
             this.sceneObjects = sceneObjects;
         }
 
-        public bool Trace(Ray ray, out HitResult? hitResult)
+        public HitResult? Trace(Ray ray)
         {
-            HitResult? result = null;
-
+            HitResult? hitResult = null;
             foreach (var sceneObject in sceneObjects)
             {
                 if (sceneObject.Intersect(ray, out HitResult? currentHit))
                 {
-                    if (currentHit?.distance > result?.distance) continue;
-                    result = currentHit;
+                    if (currentHit?.distance > hitResult?.distance)
+                    {
+                        continue;
+                    }
+                    hitResult = currentHit;
                 }
             }
-
-            hitResult = result;
-            return result is not null;
+            return hitResult;
         }
     }
 }

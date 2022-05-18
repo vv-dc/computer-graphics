@@ -1,17 +1,19 @@
 namespace Core.Consumer
 {
     using System.Text;
+
+    using RayTracer.Adapter;
     using RayTracingLib;
 
-    public class ConsoleConsumer : IConsumer<double?>
+    public class ConsoleConsumer : IConsumer<Intensity>
     {
-        public void Consume(Image<double?> image, string? target)
+        public void Consume(Image<Intensity> image, string? target)
         {
             string imageString = MapImageToString(image);
             Console.Write(imageString);
         }
 
-        public string MapImageToString(Image<double?> image)
+        public string MapImageToString(Image<Intensity> image)
         {
             var stringBuilder = new StringBuilder();
 
@@ -19,8 +21,7 @@ namespace Core.Consumer
             {
                 for (var x = 0; x < image.Width; ++x)
                 {
-                    double? color = image[y, x];
-                    char character = color is null ? ' ' : MapCharacter((double)color);
+                    char character = MapCharacter(image[y, x]);
                     stringBuilder.Append(character);
                 }
                 stringBuilder.AppendLine();
@@ -29,13 +30,14 @@ namespace Core.Consumer
             return stringBuilder.ToString();
         }
 
-        private char MapCharacter(double value)
+        private char MapCharacter(float value)
         {
-            if (value < 0) return ' ';
+            if (Math.Abs(value - ConsoleAdapter.background) < Consts.EPS) return '-'; // background
+            if (value < -Consts.EPS) return ' '; // 0
             if (value < 0.2) return '.';
             if (value < 0.5) return '*';
             if (value < 0.8) return 'O';
-            return '#'; // = 0 || >= 0.8
+            return '#'; // >= 0.8
         }
     }
 }

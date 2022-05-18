@@ -4,12 +4,17 @@ namespace RayTracer.Adapter
     using RayTracingLib.Numeric;
     using RayTracingLib.Light;
 
-    public class ConsoleAdapter : IAdapter<double?>
+    public class ConsoleAdapter : IAdapter<Intensity>
     {
-        public double? Adapt(DirectionalLight light, HitResult hitResult)
+        public static readonly Intensity background = -3;
+
+        public Intensity Adapt(DirectionalLight light, HitResult? hitResult)
         {
-            float value = -Vector3.Dot(light.Direction, hitResult.Normal);
-            return value;
+            if (hitResult == null)
+            {
+                return background;
+            }
+            return -Vector3.Dot(light.Direction, hitResult.Normal);
         }
     }
 }

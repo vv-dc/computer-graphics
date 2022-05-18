@@ -4,12 +4,11 @@ namespace RayTracingLib.Tests.Numeric
     using System.Collections.Generic;
     using Xunit;
 
+    using RayTracingLib;
     using RayTracingLib.Numeric;
 
     public class VectorTests
     {
-        public const float SQRT_EPS = 1E-15F;
-
         public static IEnumerable<object[]> GetSumData()
         {
             yield return new object[] {
@@ -64,7 +63,7 @@ namespace RayTracingLib.Tests.Numeric
         public static float GetAngleSine(Vector3 left, Vector3 right)
         {
             var lenProduct = (float)Math.Sqrt(left.LengthSquared() * right.LengthSquared());
-            if (lenProduct < SQRT_EPS)
+            if (lenProduct < Consts.EPS * Consts.EPS)
             {
                 return 1F;
             }

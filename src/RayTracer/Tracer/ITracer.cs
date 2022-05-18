@@ -5,7 +5,7 @@ namespace RayTracer.Tracer
 
     public interface ITracer
     {
-        bool Trace(Ray ray, out HitResult? hitResult);
+        HitResult? Trace(Ray ray);
         void Init(List<ITraceable> sceneObjects);
     }
 }

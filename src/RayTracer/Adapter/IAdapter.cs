@@ -5,6 +5,6 @@ namespace RayTracer.Adapter
 
     public interface IAdapter<PixelType>
     {
-        public PixelType Adapt(DirectionalLight light, HitResult hitResult);
+        public PixelType Adapt(DirectionalLight light, HitResult? hitResult);
     }
 }

@@ -3,7 +3,6 @@ namespace RayTracingLib.Traceable
     using Numeric;
     public class Triangle : ITraceable
     {
-        private const float MT_EPS = 1E-6F;
         private Vector3 v0; // A
         private Vector3 v1; // B
         private Vector3 v2; // C
@@ -25,7 +24,7 @@ namespace RayTracingLib.Traceable
             var pvec = Vector3.Cross(ray.direction, edge2);
             var det = Vector3.Dot(edge1, pvec);
 
-            if (Math.Abs(det) < MT_EPS)
+            if (Math.Abs(det) < Consts.EPS)
             {
                 return false;
             }
@@ -52,8 +51,7 @@ namespace RayTracingLib.Traceable
             {
                 return false;
             }
-            hitResult = new HitResult { distance = distance };
-            hitResult.Normal = Vector3.Cross(edge1, edge2);
+            hitResult = new HitResult { distance = distance, Normal = Vector3.Cross(edge1, edge2) };
             return true;
         }
     }

@@ -18,7 +18,7 @@ namespace RayTracer.Tests.Adapter
 
             var actual = adapter.Adapt(light, hitResult);
             var expected = -Vector3.Dot(light.Direction, hitResult.Normal);
-            Assert.Equal(actual, expected);
+            Assert.Equal(actual.Value, expected);
         }
     }
 }
