@@ -12,7 +12,7 @@ namespace Core.Scenario
 
     public class FigureScenario : IScenario
     {
-        public void Run(string[] args)
+        public void Run()
         {
             var camera = new Camera(
                 95, 35, 60,
