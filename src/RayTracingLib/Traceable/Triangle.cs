@@ -59,5 +59,12 @@ namespace RayTracingLib.Traceable
             };
             return true;
         }
+
+        public void Transform(Matrix4x4 matrix)
+        {
+            v0 = matrix * v0;
+            v1 = matrix * v1;
+            v2 = matrix * v2;
+        }
     }
 }

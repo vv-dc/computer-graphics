@@ -6,6 +6,9 @@ namespace RayTracingLib.Traceable
         private Vector3 normal;
         private Point3 point;
 
+        public Vector3 Normal { get => normal; }
+        public Point3 Point { get => point; }
+
         public Plane(Vector3 normal, Point3 point)
         {
             this.normal = normal;
@@ -32,6 +35,12 @@ namespace RayTracingLib.Traceable
             }
             hitResult = null;
             return false;
+        }
+
+        public void Transform(Matrix4x4 matrix)
+        {
+            point = matrix * point;
+            normal = Vector3.Normalize(matrix * normal);
         }
     }
 }

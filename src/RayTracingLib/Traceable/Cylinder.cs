@@ -8,6 +8,10 @@ namespace RayTracingLib.Traceable
         private Point3 point2;
         private float radius;
 
+        public Point3 Point1 { get => point1; }
+        public Point3 Point2 { get => point2; }
+        public float Radius { get => radius; }
+
         public Cylinder(Point3 point1, Point3 point2, float radius)
         {
             this.point1 = point1;
@@ -88,9 +92,9 @@ namespace RayTracingLib.Traceable
             }
             else
             {
-                if (root1 < 0)
+                if (root1 < Consts.EPS)
                 {
-                    if (root2 < 0) return false;
+                    if (root2 < Consts.EPS) return false;
                     setInside();
                 }
                 else setOutside();
@@ -102,6 +106,12 @@ namespace RayTracingLib.Traceable
                 Normal = (l - h * alpha + d * distance) * direction,
             };
             return true;
+        }
+        public void Transform(Matrix4x4 matrix)
+        {
+            point1 = matrix * point1;
+            point2 = matrix * point2;
+            radius *= Vector3.Min(matrix.ExtractScale()); // TODO: the same as for disk
         }
     }
 }

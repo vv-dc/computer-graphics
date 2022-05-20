@@ -3,15 +3,11 @@ namespace RayTracingLib.Traceable
     using Numeric;
     public class Disk : ITraceable
     {
-        private Vector3 normal;
-        private Point3 center;
-        private float radius;
         private Plane plane;
+        private float radius;
 
         public Disk(Vector3 normal, Point3 center, float radius)
         {
-            this.normal = normal;
-            this.center = center;
             this.radius = radius;
             plane = new Plane(normal, center);
         }
@@ -21,15 +17,21 @@ namespace RayTracingLib.Traceable
             if (plane.Intersect(ray, out hitResult))
             {
                 var point = ray.GetPoint(hitResult!.distance);
-                if ((point - center).LengthSquared() < radius * radius)
+                if ((point - plane.Point).LengthSquared() < radius * radius)
                 {
                     hitResult.ray = ray;
-                    hitResult.Normal -= normal;
+                    hitResult.Normal -= plane.Normal;
                     return true;
                 }
             }
             hitResult = null;
             return false;
+        }
+
+        public void Transform(Matrix4x4 matrix)
+        {
+            plane.Transform(matrix);
+            radius *= Vector3.Min(matrix.ExtractScale()); // TODO: find a projection of scale on the disk plane
         }
     }
 }

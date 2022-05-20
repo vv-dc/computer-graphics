@@ -6,6 +6,9 @@ namespace RayTracingLib.Traceable
         private Point3 center;
         private float radius;
 
+        public Point3 Center { get => center; }
+        public float Radius { get => radius; }
+
         public Sphere(Point3 center, float radius)
         {
             this.center = center;
@@ -59,6 +62,12 @@ namespace RayTracingLib.Traceable
                 Normal = ray.GetPoint(distance) - center,
             };
             return true;
+        }
+
+        public void Transform(Matrix4x4 matrix)
+        {
+            center = matrix * center;
+            radius *= Vector3.Min(matrix.ExtractScale());
         }
     }
 }

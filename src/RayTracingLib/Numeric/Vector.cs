@@ -44,6 +44,9 @@ namespace RayTracingLib.Numeric
         public static Vector3 Normalize(Vector3 value) =>
             value / value.Length();
 
+        public static float Min(Vector3 value) =>
+            Math.Min(value.X, Math.Min(value.Y, value.Z));
+
         public static Vector3 Cross(Vector3 left, Vector3 right) =>
             new(
                 left.Y * right.Z - left.Z * right.Y,

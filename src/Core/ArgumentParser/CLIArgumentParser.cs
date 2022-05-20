@@ -25,8 +25,8 @@ namespace Core.ArgumentParser
             {
                 help.AdditionalNewLineAfterOption = false;
                 help.AddDashesToOption = true;
-                help.Copyright = "";
-                help.Heading = "";
+                help.Copyright = "\u001b[1F";
+                help.Heading = "Simple CLI raytracer";
                 help.AutoHelp = false;
                 help.AutoVersion = false;
                 return HelpText.DefaultParsingErrorsHandler(parsed, help);
