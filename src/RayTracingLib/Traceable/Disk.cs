@@ -21,7 +21,7 @@ namespace RayTracingLib.Traceable
                 if ((point - plane.Point).LengthSquared() < radius * radius)
                 {
                     hitResult.ray = ray;
-                    hitResult.Normal -= plane.Normal;
+                    hitResult.Normal = -plane.Normal;
                     return true;
                 }
             }

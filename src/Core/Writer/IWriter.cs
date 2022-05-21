@@ -4,6 +4,6 @@ namespace Core.Writer
 
     public interface IWriter<PixelType>
     {
-        void Consume(Image<PixelType> image, string? target);
+        void Write(Image<PixelType> image, string target);
     }
 }

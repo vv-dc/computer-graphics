@@ -7,7 +7,7 @@ namespace Core.Writer
 
     public class ConsoleWriter : IWriter<Intensity>
     {
-        public void Consume(Image<Intensity> image, string? target)
+        public void Write(Image<Intensity> image, string target)
         {
             string imageString = MapImageToString(image);
             Console.Write(imageString);

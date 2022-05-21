@@ -26,7 +26,7 @@ namespace RayTracer.Adapter
             if (hitResult is null) return Intensity.Background;
             var intensity = Vector3.Dot(-light.Direction, hitResult.Normal);
 
-            var hitPoint = hitResult.ray.GetPoint(hitResult.distance) + hitResult.Normal * Consts.EPS;
+            var hitPoint = hitResult.ray.GetPoint(hitResult.distance) + hitResult.Normal * Consts.SHADOW_EPS;
             var shadowRay = new Ray(hitPoint, -light.Direction);
             var hit = shadowTracer.Trace(shadowRay, out var shadowHitResult);
 
