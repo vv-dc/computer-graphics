@@ -1,4 +1,4 @@
-namespace RayTracingLib
+namespace RayTracer
 {
     public class Image<PixelType>
     {
@@ -19,7 +19,8 @@ namespace RayTracingLib
             set => pixels[x, y] = value;
         }
 
-        public PixelType[,] AsMatrix() {
+        public PixelType[,] AsMatrix()
+        {
             return this.pixels;
         }
     }

@@ -1,7 +1,7 @@
 namespace Core
 {
-    using Core.Scenario;
     using Core.ArgumentParser;
+    using Core.Scenario;
 
     public class Program
     {

@@ -21,8 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\RayTracingLib\RayTracingLib.csproj" />
-    <ProjectReference Include="..\..\src\RayTracer\RayTracer.csproj" />
     <ProjectReference Include="..\..\src\Common\Common.csproj" />
   </ItemGroup>
 

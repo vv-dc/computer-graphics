@@ -1,8 +1,8 @@
 namespace RayTracer.Renderer
 {
-    using RayTracingLib;
-    using RayTracer.Tracer;
     using RayTracer.Adapter;
+    using RayTracer.Tracer;
+    using RayTracingLib;
 
     public class BasicRenderer<PixelType> : IRenderer<PixelType>
     {

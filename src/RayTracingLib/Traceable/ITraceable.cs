@@ -1,6 +1,6 @@
 namespace RayTracingLib.Traceable
 {
-    using RayTracingLib.Numeric;
+    using Common.Numeric;
 
     public interface ITraceable
     {

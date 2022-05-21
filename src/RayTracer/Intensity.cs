@@ -1,4 +1,4 @@
-namespace RayTracingLib
+namespace RayTracer
 {
     public struct Intensity
     {

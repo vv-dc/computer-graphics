@@ -1,12 +1,12 @@
 namespace RayTracingLib
 {
-    using RayTracingLib.Numeric;
+    using Common.Numeric;
 
     public class HitResult
     {
         public float distance;
         public Ray ray;
-        private Vector3 normal;
+        private Vector3 normal; // TODO: replace with normal
 
         public Vector3 Normal
         {

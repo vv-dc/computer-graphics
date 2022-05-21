@@ -1,6 +1,8 @@
 namespace RayTracingLib.Traceable
 {
-    using Numeric;
+    using Common;
+    using Common.Numeric;
+
     public class Sphere : ITraceable
     {
         private Point3 center;

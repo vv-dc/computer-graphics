@@ -1,6 +1,7 @@
 namespace RayTracingLib.Traceable
 {
-    using Numeric;
+    using Common.Numeric;
+
     public class Disk : ITraceable
     {
         private Plane plane;

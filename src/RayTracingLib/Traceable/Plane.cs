@@ -1,6 +1,8 @@
 namespace RayTracingLib.Traceable
 {
-    using Numeric;
+    using Common;
+    using Common.Numeric;
+
     public class Plane : ITraceable
     {
         private Vector3 normal;
@@ -40,7 +42,7 @@ namespace RayTracingLib.Traceable
         public void Transform(Matrix4x4 matrix)
         {
             point = matrix * point;
-            normal = Vector3.Normalize(matrix * normal);
+            normal = Vector3.Normalize(matrix * normal); // TODO: remove normalize
         }
     }
 }

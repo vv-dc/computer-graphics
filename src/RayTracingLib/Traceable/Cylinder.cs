@@ -1,6 +1,7 @@
 namespace RayTracingLib.Traceable
 {
-    using RayTracingLib.Numeric;
+    using Common;
+    using Common.Numeric;
 
     public class Cylinder : ITraceable
     {

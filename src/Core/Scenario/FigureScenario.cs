@@ -1,14 +1,14 @@
 namespace Core.Scenario
 {
-    using Core.Consumer;
+    using Common;
+    using Common.Numeric;
+    using Core.Writer;
     using RayTracer;
+    using RayTracer.Adapter;
     using RayTracer.Renderer;
     using RayTracer.Tracer;
-    using RayTracer.Adapter;
-    using RayTracingLib;
-    using RayTracingLib.Traceable;
-    using RayTracingLib.Numeric;
     using RayTracingLib.Light;
+    using RayTracingLib.Traceable;
 
     public class FigureScenario : IScenario
     {
@@ -67,11 +67,11 @@ namespace Core.Scenario
             var tracer = new BasicTracer();
             // var adapter = new ConsoleAdapter();
             var shadowTracer = new FirstHitTracer();
-            var adapter = new ConsoleShadowAdapter(shadowTracer);
+            var adapter = new IntensityShadowAdapter(shadowTracer);
             var renderer = new BasicRenderer<Intensity>(tracer, adapter);
 
             var image = renderer.Render(scene);
-            var consumer = new ConsoleConsumer();
+            var consumer = new ConsoleWriter();
             consumer.Consume(image, null);
         }
     }

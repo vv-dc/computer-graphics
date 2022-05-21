@@ -1,4 +1,4 @@
-namespace RayTracingLib.Numeric
+namespace Common.Numeric
 {
     public class Matrix4x4
     {
@@ -194,5 +194,7 @@ namespace RayTracingLib.Numeric
                 left.M21 * right.X + left.M22 * right.Y + left.M23 * right.Z + left.M24,
                 left.M31 * right.X + left.M32 * right.Y + left.M33 * right.Z + left.M34
             );
+
+        // TODO: matrix * normal <-> Normalize(matrix * vector)
     }
 }

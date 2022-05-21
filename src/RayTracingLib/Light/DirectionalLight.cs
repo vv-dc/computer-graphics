@@ -1,6 +1,6 @@
 namespace RayTracingLib.Light
 {
-    using Numeric;
+    using Common.Numeric;
 
     public class DirectionalLight
     {

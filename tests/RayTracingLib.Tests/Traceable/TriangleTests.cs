@@ -1,11 +1,12 @@
 namespace RayTracingLib.Tests.Traceable
 {
     using System;
+
     using Xunit;
 
-    using RayTracingLib;
+    using Common;
+    using Common.Numeric;
     using RayTracingLib.Traceable;
-    using RayTracingLib.Numeric;
 
     public class TriangleTests
     {

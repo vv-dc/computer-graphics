@@ -1,11 +1,12 @@
-namespace RayTracingLib.Tests.Numeric
+namespace Common.Tests.Numeric
 {
     using System;
     using System.Collections.Generic;
+
     using Xunit;
 
-    using RayTracingLib;
-    using RayTracingLib.Numeric;
+    using Common;
+    using Common.Numeric;
 
     public class VectorTests
     {

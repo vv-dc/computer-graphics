@@ -1,6 +1,7 @@
 namespace RayTracingLib
 {
-    using Numeric;
+    using Common.Numeric;
+
     public class Ray
     {
         public readonly Point3 origin;

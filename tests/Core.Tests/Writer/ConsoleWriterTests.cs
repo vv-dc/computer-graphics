@@ -1,16 +1,16 @@
-namespace Core.Tests.Consumer
+namespace Core.Tests.Writer
 {
     using Xunit;
 
-    using RayTracingLib;
-    using Core.Consumer;
+    using Core.Writer;
+    using RayTracer;
 
-    public class ConsoleConsumerTests
+    public class ConsoleWriterTests
     {
         [Fact]
         public void NullableImageToString()
         {
-            var consumer = new ConsoleConsumer();
+            var consumer = new ConsoleWriter();
             var image = new Image<Intensity>(3, 3);
             var bg = Intensity.Background;
             image[0, 0] = bg;

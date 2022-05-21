@@ -1,11 +1,11 @@
 namespace RayTracer.Adapter
 {
+    using Common.Numeric;
     using RayTracingLib;
-    using RayTracingLib.Numeric;
     using RayTracingLib.Light;
     using RayTracingLib.Traceable;
 
-    public class ConsoleAdapter : IAdapter<Intensity>
+    public class IntensityAdapter : IAdapter<Intensity>
     {
         public void Init(List<ITraceable> sceneObjects) { }
 

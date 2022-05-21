@@ -1,6 +1,8 @@
 namespace RayTracingLib.Traceable
 {
-    using Numeric;
+    using Common;
+    using Common.Numeric;
+
     public class Triangle : ITraceable
     {
         private Point3 v0; // A

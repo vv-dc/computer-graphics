@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="../RayTracingLib\RayTracingLib.csproj" />
     <ProjectReference Include="../RayTracer\RayTracer.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

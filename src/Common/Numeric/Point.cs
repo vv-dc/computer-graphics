@@ -1,4 +1,4 @@
-namespace RayTracingLib.Numeric
+namespace Common.Numeric
 {
     public class Point3
     {

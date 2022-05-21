@@ -1,7 +1,8 @@
 namespace RayTracer
 {
+    using Common;
+    using Common.Numeric;
     using RayTracingLib;
-    using RayTracingLib.Numeric;
 
     public class Camera
     {

@@ -1,16 +1,17 @@
 namespace RayTracer.Adapter
 {
+    using Common;
+    using Common.Numeric;
     using RayTracer.Tracer;
     using RayTracingLib;
-    using RayTracingLib.Numeric;
     using RayTracingLib.Light;
     using RayTracingLib.Traceable;
 
-    public class ConsoleShadowAdapter : IAdapter<Intensity>
+    public class IntensityShadowAdapter : IAdapter<Intensity>
     {
         private ITracer shadowTracer;
 
-        public ConsoleShadowAdapter(ITracer shadowTracer)
+        public IntensityShadowAdapter(ITracer shadowTracer)
         {
             this.shadowTracer = shadowTracer;
         }

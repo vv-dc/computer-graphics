@@ -1,10 +1,11 @@
-namespace Core.Consumer
+namespace Core.Writer
 {
     using System.Text;
 
-    using RayTracingLib;
+    using Common;
+    using RayTracer;
 
-    public class ConsoleConsumer : IConsumer<Intensity>
+    public class ConsoleWriter : IWriter<Intensity>
     {
         public void Consume(Image<Intensity> image, string? target)
         {

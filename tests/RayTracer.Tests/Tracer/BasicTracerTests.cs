@@ -4,11 +4,10 @@ namespace RayTracer.Tests.Tracer
 
     using Xunit;
 
+    using Common.Numeric;
+    using RayTracer.Tracer;
     using RayTracingLib;
     using RayTracingLib.Traceable;
-    using RayTracingLib.Numeric;
-    using RayTracer.Tracer;
-
 
     public class BasicTracerTests
     {

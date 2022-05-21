@@ -5,14 +5,13 @@ namespace RayTracer.Tests.Renderer
 
     using Xunit;
 
-    using RayTracingLib;
-    using RayTracingLib.Numeric;
+    using Common.Numeric;
+    using RayTracer;
+    using RayTracer.Adapter;
+    using RayTracer.Renderer;
+    using RayTracer.Tracer;
     using RayTracingLib.Light;
     using RayTracingLib.Traceable;
-    using RayTracer;
-    using RayTracer.Tracer;
-    using RayTracer.Renderer;
-    using RayTracer.Adapter;
 
     public class BasicRendererTests
     {
@@ -51,7 +50,7 @@ namespace RayTracer.Tests.Renderer
                 Light = new DirectionalLight(new Vector3(0, 0, -1))
             };
             var tracer = new BasicTracer();
-            var adapter = new ConsoleAdapter();
+            var adapter = new IntensityAdapter();
             var renderer = new BasicRenderer<Intensity>(tracer, adapter);
 
             // scene has no objects, so image should be empty
@@ -73,7 +72,7 @@ namespace RayTracer.Tests.Renderer
                 Light = new DirectionalLight(new Vector3(0, 0, -1))
             };
             var tracer = new BasicTracer();
-            var adapter = new ConsoleAdapter();
+            var adapter = new IntensityAdapter();
             var renderer = new BasicRenderer<Intensity>(tracer, adapter);
 
             var sphere = new Sphere(new Point3(-0.2f, 0.2f, -3), 0.5f);

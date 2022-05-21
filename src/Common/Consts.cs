@@ -1,4 +1,4 @@
-namespace RayTracingLib
+namespace Common
 {
     public static class Consts
     {
