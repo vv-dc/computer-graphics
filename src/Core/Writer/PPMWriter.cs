@@ -17,9 +17,9 @@ namespace Core.Writer
             }
         }
 
-        private StreamWriter BuildStreamWriter(String path)
+        private StreamWriter BuildStreamWriter(string path)
         {
-            return new StreamWriter(path);
+            return new StreamWriter(path, false, Encoding.ASCII);
         }
 
         private string ComposeImage(Image<Color> image)

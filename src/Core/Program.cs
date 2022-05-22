@@ -7,7 +7,7 @@ namespace Core
     {
         public static void Main(string[] args)
         {
-            var parser = new CLIArgumentParser() { Predefined = new FigureScenario() };
+            var parser = new CLIArgumentParser() { Predefined = new ConsoleScenario() };
             parser.Parse(args);
         }
     }

@@ -10,12 +10,12 @@ namespace Core.Scenario
     using RayTracingLib.Light;
     using RayTracingLib.Traceable;
 
-    public class FigureScenario : IScenario
+    public class ConsoleScenario : IScenario
     {
-        public void Run()
+        public void Run(string[] args)
         {
             var camera = new Camera(
-                1366, 720, 60,
+                90, 35, 60,
                 new Point3(0, 0, 0),
                 new Vector3(0, 0, -1)
             );
@@ -71,12 +71,11 @@ namespace Core.Scenario
             var shadowTracer = new FirstHitTracer();
 
             var intensityAdapter = new IntensityShadowAdapter(shadowTracer);
-            var adapter = new ColorAdapter(intensityAdapter);
-            var renderer = new BasicRenderer<Color>(tracer, adapter);
+            var renderer = new BasicRenderer<Intensity>(tracer, intensityAdapter);
 
             var image = renderer.Render(scene);
-            var consumer = new PPMWriter();
-            consumer.Write(image, "../../out.ppm");
+            var consumer = new ConsoleWriter();
+            consumer.Write(image, "console");
         }
     }
 }
