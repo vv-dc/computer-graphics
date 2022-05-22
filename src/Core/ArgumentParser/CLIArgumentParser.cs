@@ -18,7 +18,12 @@ namespace Core.ArgumentParser
                 .WithParsed<ModelOptions>(options =>
                 {
                     var scenario = new CommandScenario();
-                    scenario.Run(new string[] { options.Source, options.Output });
+                    scenario.Run(new string[] {
+                        options.Source,
+                        options.Output,
+                        options.Width.ToString(),
+                        options.Height.ToString()
+                    });
                 })
                 .WithNotParsed(errors => DisplayHelp(parsed, errors));
         }

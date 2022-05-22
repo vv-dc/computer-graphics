@@ -1,5 +1,6 @@
 namespace RayTracer.Renderer
 {
+    using Common.ProgressBar;
     using RayTracer.Adapter;
     using RayTracer.Tracer;
     using RayTracingLib;
@@ -23,6 +24,8 @@ namespace RayTracer.Renderer
 
             Camera camera = scene.camera;
             var image = new Image<PixelType>(camera.width, camera.height);
+            var progressBar = new EtaProgressBar(camera.width * camera.height);
+            progressBar.StartTimer();
 
             for (var y = 0; y < image.Height; ++y)
             {
@@ -32,7 +35,9 @@ namespace RayTracer.Renderer
                     tracer.Trace(ray, out var hitResult);
                     image[y, x] = adapter.Adapt(scene.Light, hitResult);
                 }
+                progressBar.Refresh((y + 1) * image.Width, "Render");
             }
+
             return image;
         }
     }

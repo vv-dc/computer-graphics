@@ -1,6 +1,7 @@
 namespace Core.Scenario
 {
     using Common;
+    using Common.Timer;
     using Common.Numeric;
     using Core.Writer;
     using Core.Reader.OBJReader;
@@ -15,7 +16,9 @@ namespace Core.Scenario
         public void Run(string[] args)
         {
             var camera = new Camera(
-                300, 300, 60,
+                int.Parse(args[2]),
+                int.Parse(args[3]),
+                60,
                 new Point3(0, 0, 1.15f),
                 new Vector3(0, 0, -1)
             );
@@ -26,15 +29,17 @@ namespace Core.Scenario
             };
 
             var objReader = new OBJReader();
-            objReader.Read(scene, args[0]);
-            Console.WriteLine($"Triangles: {scene.objects.Count}");
+
+            Timer.LogTime(() =>
+            {
+                objReader.Read(scene, args[0]);
+            }, "Read");
 
             foreach (var sceneObject in scene.objects)
             {
                 sceneObject.Transform(
                     Matrix4x4.CreateRotationY(-45 * Consts.DegToRad) *
                     Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
-                // Matrix4x4.CreateRotationZ(-10 * Consts.DegToRad) 
                 );
             }
 
@@ -45,11 +50,17 @@ namespace Core.Scenario
             var adapter = new ColorAdapter(intensityAdapter);
             var renderer = new BasicRenderer<Color>(tracer, adapter);
 
-            var image = renderer.Render(scene);
-            Console.WriteLine("Render done");
+            Image<Color>? image = null;
+            Timer.LogTime(() =>
+            {
+                image = renderer.Render(scene);
+            }, "Render");
 
             var consumer = new PPMWriter();
-            consumer.Write(image, args[1]);
+            Timer.LogTime(() =>
+            {
+                consumer.Write(image!, args[1]);
+            }, "Write");
         }
     }
 }
