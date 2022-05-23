@@ -64,6 +64,7 @@ namespace Core.Scenario
                 new Point3(1, -0.5f, -1.25f),
                 new Point3(8, 0.25f, -8)
             );
+            triangle.SetDefaultNormals();
             // triangle.Transform(Matrix4x4.CreateRotationX(Consts.DegToRad * -45));
             scene.AddObject(triangle);
 

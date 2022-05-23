@@ -3,6 +3,7 @@ namespace Core.Scenario
     using Common;
     using Common.Timer;
     using Common.Numeric;
+    using Core.Reader;
     using Core.Writer;
     using Core.Reader.OBJReader;
     using RayTracer;
@@ -29,19 +30,18 @@ namespace Core.Scenario
             };
 
             var objReader = new OBJReader();
+            Mesh? mesh = null;
 
             Timer.LogTime(() =>
             {
-                objReader.Read(scene, args[0]);
+                mesh = objReader.Read(scene, args[0]);
             }, "Read");
 
-            foreach (var sceneObject in scene.objects)
-            {
-                sceneObject.Transform(
-                    Matrix4x4.CreateRotationY(-45 * Consts.DegToRad) *
-                    Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
-                );
-            }
+            mesh!.Transform(
+                Matrix4x4.CreateRotationY(-45 * Consts.DegToRad) *
+                Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
+            );
+            scene.SetObjects(mesh.GetTraceables());
 
             var tracer = new BasicTracer();
             var shadowTracer = new FirstHitTracer();
@@ -56,7 +56,7 @@ namespace Core.Scenario
                 image = renderer.Render(scene);
             }, "Render");
 
-            var consumer = new PPMWriter();
+            var consumer = new PNGWriter();
             Timer.LogTime(() =>
             {
                 consumer.Write(image!, args[1]);

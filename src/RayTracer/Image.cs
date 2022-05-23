@@ -23,5 +23,18 @@ namespace RayTracer
         {
             return this.pixels;
         }
+
+        public byte[] GetBytes()
+        {
+            byte[] bytes = new byte[Width * Height];
+            for (int y = 0; y < Height; ++y)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    bytes[y * Width + x] = Convert.ToByte(pixels[y, x]);
+                }
+            }
+            return bytes;
+        }
     }
 }

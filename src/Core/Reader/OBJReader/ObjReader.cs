@@ -14,13 +14,12 @@ namespace Core.Reader.OBJReader
             new FaceParser()
         };
 
-        public void Read(Scene scene, string path)
+        public Mesh Read(Scene scene, string path)
         {
-            List<ITraceable> sceneObjects = ParseObjects(path);
-            scene.SetObjects(sceneObjects);
+            return ParseObjects(path);
         }
 
-        private List<ITraceable> ParseObjects(string path)
+        private Mesh ParseObjects(string path)
         {
             ObjState state = new ObjState();
 
@@ -33,7 +32,7 @@ namespace Core.Reader.OBJReader
                 parser?.Parse(parts, state);
             }
 
-            return state.objects;
+            return state;
         }
 
         private IEnumerable<string> GetLinesIterator(string path)
@@ -43,6 +42,7 @@ namespace Core.Reader.OBJReader
 
         private IObjParser? GetParserNullable(string[] parts)
         {
+            if (parts.Length == 0) return null;
             string entityType = parts[0];
             return parsers.Find((parser) => parser.CanParse(entityType));
         }

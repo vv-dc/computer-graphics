@@ -4,6 +4,6 @@ namespace Core.Reader
 
     public interface IReader
     {
-        void Read(Scene scene, string source);
+        Mesh Read(Scene scene, string source);
     }
 }

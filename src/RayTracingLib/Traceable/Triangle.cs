@@ -18,7 +18,6 @@ namespace RayTracingLib.Traceable
             this.v0 = v0;
             this.v1 = v1;
             this.v2 = v2;
-            this.SetDefaultNormals();
         }
 
         public void SetNormals(Vector3 n0, Vector3 n1, Vector3 n2)
