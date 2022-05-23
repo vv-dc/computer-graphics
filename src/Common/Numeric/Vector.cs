@@ -16,7 +16,7 @@ namespace Common.Numeric
             X = Y = Z = value;
         }
 
-        public float Length() => (float)Math.Sqrt(LengthSquared());
+        public float Length() => MathF.Sqrt(LengthSquared());
 
         public float LengthSquared() => Dot(this, this);
 

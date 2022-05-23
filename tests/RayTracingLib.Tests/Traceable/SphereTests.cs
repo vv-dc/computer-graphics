@@ -54,7 +54,7 @@ namespace RayTracingLib.Tests.Traceable
         public void OneIntersectionPoint()
         {
             var ray = new Ray(new Point3(0, 0, -2), new Vector3(1, 1, 0));
-            var distance = (float)Math.Sqrt(2);
+            var distance = MathF.Sqrt(2);
             AssertIntersection(sphere, ray, distance);
         }
 
@@ -62,7 +62,7 @@ namespace RayTracingLib.Tests.Traceable
         public void TwoIntersectionPoints()
         {
             var ray = new Ray(new Point3(-3), new Vector3(1));
-            var distance = 4 * (float)Math.Sqrt(3) - 3;
+            var distance = 4 * MathF.Sqrt(3) - 3;
             AssertIntersection(sphere, ray, distance);
         }
 
@@ -70,7 +70,7 @@ namespace RayTracingLib.Tests.Traceable
         public void RayOriginInsideSphere()
         {
             var ray = new Ray(new Point3(0), new Vector3(1));
-            var distance = 3 + (float)Math.Sqrt(3);
+            var distance = 3 + MathF.Sqrt(3);
             AssertIntersection(sphere, ray, distance);
         }
 

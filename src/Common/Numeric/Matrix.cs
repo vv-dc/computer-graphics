@@ -69,8 +69,8 @@ namespace Common.Numeric
 
         public static Matrix4x4 CreateRotationX(float angle) // in radians
         {
-            var cos = (float)Math.Cos(angle);
-            var sin = (float)Math.Sin(angle);
+            var cos = MathF.Cos(angle);
+            var sin = MathF.Sin(angle);
 
 #pragma warning disable format
             return new(
@@ -84,8 +84,8 @@ namespace Common.Numeric
 
         public static Matrix4x4 CreateRotationX(float angle, Point3 center) // in radians
         {
-            var cos = (float)Math.Cos(angle);
-            var sin = (float)Math.Sin(angle);
+            var cos = MathF.Cos(angle);
+            var sin = MathF.Sin(angle);
 
 #pragma warning disable format
             return new(
@@ -99,8 +99,8 @@ namespace Common.Numeric
 
         public static Matrix4x4 CreateRotationY(float angle) // in radians
         {
-            var cos = (float)Math.Cos(angle);
-            var sin = (float)Math.Sin(angle);
+            var cos = MathF.Cos(angle);
+            var sin = MathF.Sin(angle);
 
 #pragma warning disable format
             return new(
@@ -114,8 +114,8 @@ namespace Common.Numeric
 
         public static Matrix4x4 CreateRotationY(float angle, Point3 center) // in radians
         {
-            var cos = (float)Math.Cos(angle);
-            var sin = (float)Math.Sin(angle);
+            var cos = MathF.Cos(angle);
+            var sin = MathF.Sin(angle);
 
 #pragma warning disable format
             return new(
@@ -129,8 +129,8 @@ namespace Common.Numeric
 
         public static Matrix4x4 CreateRotationZ(float angle) // in radians
         {
-            var cos = (float)Math.Cos(angle);
-            var sin = (float)Math.Sin(angle);
+            var cos = MathF.Cos(angle);
+            var sin = MathF.Sin(angle);
 
 #pragma warning disable format
             return new(
@@ -144,8 +144,8 @@ namespace Common.Numeric
 
         public static Matrix4x4 CreateRotationZ(float angle, Point3 center) // in radians
         {
-            var cos = (float)Math.Cos(angle);
-            var sin = (float)Math.Sin(angle);
+            var cos = MathF.Cos(angle);
+            var sin = MathF.Sin(angle);
 
 #pragma warning disable format
             return new(

@@ -24,7 +24,7 @@ namespace RayTracer
 
         public Ray CastRay(int x, int y)
         {
-            float fovScale = (float)Math.Tan(Consts.DegToRad * fov / 2);
+            float fovScale = MathF.Tan(Consts.DegToRad * fov / 2);
 
             // from -1 to 1, square, origin in the center
             float xxScreen = (2 * ((x + 0.5f) / width) - 1);

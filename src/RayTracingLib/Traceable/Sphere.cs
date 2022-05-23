@@ -33,7 +33,7 @@ namespace RayTracingLib.Traceable
             float distance;
             if (D > Consts.EPS)
             {
-                var sqrtD = (float)Math.Sqrt(D);
+                var sqrtD = MathF.Sqrt(D);
 
                 var root1 = -(halfB - sqrtD);
                 var root2 = -(halfB + sqrtD);

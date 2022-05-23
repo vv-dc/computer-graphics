@@ -61,7 +61,7 @@ namespace RayTracingLib.Tests.Traceable
         public void RayIntersectsPlane()
         {
             var ray = new Ray(new Point3(0), new Vector3(1));
-            var distance = (float)Math.Sqrt(3);
+            var distance = MathF.Sqrt(3);
             AssertIntersection(plane, ray, distance);
         }
     }

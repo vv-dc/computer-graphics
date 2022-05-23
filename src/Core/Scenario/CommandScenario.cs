@@ -48,7 +48,7 @@ namespace Core.Scenario
 
             var intensityAdapter = new IntensityShadowAdapter(shadowTracer);
             var adapter = new ColorAdapter(intensityAdapter);
-            var renderer = new BasicRenderer<Color>(tracer, adapter);
+            var renderer = new ParallelRenderer<Color>(tracer, adapter);
 
             Image<Color>? image = null;
             Timer.LogTime(() =>

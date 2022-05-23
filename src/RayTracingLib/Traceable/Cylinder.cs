@@ -48,7 +48,7 @@ namespace RayTracingLib.Traceable
             {
                 return false;
             }
-            var sqrtD = (float)Math.Sqrt(D);
+            var sqrtD = MathF.Sqrt(D);
 
             var root1 = -(halfB - sqrtD) / A;
             var root2 = -(halfB + sqrtD) / A;

@@ -54,7 +54,7 @@ namespace RayTracingLib.Tests.Traceable
         public void RayIntersectsOutsideSurface()
         {
             var ray = new Ray(new Point3(0.5F, 0, 2), new Vector3(0.5F, 1, 0));
-            var distance = (float)Math.Sqrt(1.25F);
+            var distance = MathF.Sqrt(1.25F);
             AssertIntersection(cylinder, ray, distance);
         }
 
@@ -62,7 +62,7 @@ namespace RayTracingLib.Tests.Traceable
         public void RayIntersectsInsideSurface()
         {
             var ray = new Ray(new Point3(2, 0, 2), new Vector3(0, 1, 1));
-            var distance = (float)Math.Sqrt(2);
+            var distance = MathF.Sqrt(2);
             AssertIntersection(cylinder, ray, distance);
         }
 

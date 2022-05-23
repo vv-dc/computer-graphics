@@ -63,13 +63,13 @@ namespace Common.Tests.Numeric
 
         public static float GetAngleSine(Vector3 left, Vector3 right)
         {
-            var lenProduct = (float)Math.Sqrt(left.LengthSquared() * right.LengthSquared());
+            var lenProduct = MathF.Sqrt(left.LengthSquared() * right.LengthSquared());
             if (lenProduct < Consts.EPS * Consts.EPS)
             {
                 return 1F;
             }
             var angle = Vector3.Dot(left, right) / lenProduct;
-            return (float)Math.Sqrt(1 - Math.Pow(angle, 2));
+            return MathF.Sqrt(1 - MathF.Pow(angle, 2));
         }
 
         [Theory]

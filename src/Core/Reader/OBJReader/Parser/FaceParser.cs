@@ -20,6 +20,7 @@ namespace Core.Reader.OBJReader.Parser
             }
 
             var triangle = new Triangle(points[0], points[1], points[2]);
+            triangle.SetNormals(normals[0], normals[1], normals[2]);
             state.objects.Add(triangle);
         }
 

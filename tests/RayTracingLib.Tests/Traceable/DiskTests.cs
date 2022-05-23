@@ -47,9 +47,9 @@ namespace RayTracingLib.Tests.Traceable
         public void RayIntersectsDiskCircumference()
         {
             var ray = new Ray(
-                new Point3(0), new Vector3(0.5F, 1, 1 - (float)Math.Sqrt(3 - Consts.EPS) / 2)
+                new Point3(0), new Vector3(0.5F, 1, 1 - MathF.Sqrt(3 - Consts.EPS) / 2)
             );
-            var distance = (float)Math.Sqrt(3 - Math.Sqrt(3));
+            var distance = MathF.Sqrt(3 - MathF.Sqrt(3));
             AssertIntersection(disk, ray, distance);
         }
 
@@ -57,7 +57,7 @@ namespace RayTracingLib.Tests.Traceable
         public void RayIntersectsDiskSurface()
         {
             var ray = new Ray(new Point3(0), new Vector3(1));
-            var distance = (float)Math.Sqrt(3);
+            var distance = MathF.Sqrt(3);
             AssertIntersection(disk, ray, distance);
         }
     }
