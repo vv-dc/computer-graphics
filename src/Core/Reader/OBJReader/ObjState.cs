@@ -21,11 +21,14 @@ namespace Core.Reader.OBJReader
                     points[face.points[1]],
                     points[face.points[2]]
                 );
-                triangle.SetNormals(
-                    normals[face.normals[0]],
-                    normals[face.normals[1]],
-                    normals[face.normals[2]]
-                );
+                if (face.normals is not null)
+                {
+                    triangle.SetNormals(
+                        normals[face.normals[0]],
+                        normals[face.normals[1]],
+                        normals[face.normals[2]]
+                    );
+                }
                 triangles.Add(triangle);
             }
 
@@ -35,7 +38,7 @@ namespace Core.Reader.OBJReader
         public void Transform(Matrix4x4 matrix)
         {
             for (int i = 0; i < normals.Count; ++i)
-                normals[i] = matrix * normals[i];
+                normals[i] = Vector3.Normalize(matrix * normals[i]);
 
             for (int i = 0; i < points.Count; ++i)
                 points[i] = matrix * points[i];

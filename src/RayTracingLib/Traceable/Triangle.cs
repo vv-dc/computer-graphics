@@ -22,9 +22,9 @@ namespace RayTracingLib.Traceable
 
         public void SetNormals(Vector3 n0, Vector3 n1, Vector3 n2)
         {
-            this.n0 = Vector3.Normalize(n0);
-            this.n1 = Vector3.Normalize(n1);
-            this.n2 = Vector3.Normalize(n2);
+            this.n0 = n0;
+            this.n1 = n1;
+            this.n2 = n2;
         }
 
         public void SetDefaultNormals()
@@ -86,6 +86,7 @@ namespace RayTracingLib.Traceable
             v0 = matrix * v0;
             v1 = matrix * v1;
             v2 = matrix * v2;
+
             n0 = Vector3.Normalize(matrix * n0);
             n1 = Vector3.Normalize(matrix * n1);
             n2 = Vector3.Normalize(matrix * n2);

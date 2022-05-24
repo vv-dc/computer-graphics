@@ -14,16 +14,11 @@ namespace Core.ArgumentParser
             var parser = new Parser(with => with.HelpWriter = null);
             var parsed = parser.ParseArguments<PredefinedOptions, ModelOptions>(args);
             parsed
-                .WithParsed<PredefinedOptions>(options => Predefined.Run(new string[] { }))
+                .WithParsed<PredefinedOptions>(options => Predefined.Run(null, null, options.Width, options.Height))
                 .WithParsed<ModelOptions>(options =>
                 {
                     var scenario = new CommandScenario();
-                    scenario.Run(new string[] {
-                        options.Source,
-                        options.Output,
-                        options.Width.ToString(),
-                        options.Height.ToString()
-                    });
+                    scenario.Run(options.Source, options.Output, options.Width, options.Height);
                 })
                 .WithNotParsed(errors => DisplayHelp(parsed, errors));
         }

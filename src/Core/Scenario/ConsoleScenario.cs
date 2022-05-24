@@ -12,10 +12,10 @@ namespace Core.Scenario
 
     public class ConsoleScenario : IScenario
     {
-        public void Run(string[] args)
+        public void Run(string? source, string? output, int width, int height)
         {
             var camera = new Camera(
-                90, 35, 60,
+                width, height, 60,
                 new Point3(0, 0, 0),
                 new Vector3(0, 0, -1)
             );
@@ -75,8 +75,8 @@ namespace Core.Scenario
             var renderer = new BasicRenderer<Intensity>(tracer, intensityAdapter);
 
             var image = renderer.Render(scene);
-            var consumer = new ConsoleWriter();
-            consumer.Write(image, "console");
+            var writer = new ConsoleWriter();
+            writer.Write(image, "console");
         }
     }
 }

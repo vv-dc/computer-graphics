@@ -6,6 +6,12 @@ namespace Core.ArgumentParser
     [Verb("predefined", isDefault: true, HelpText = "Render a predefinded (compiled) scene")]
     public class PredefinedOptions
     {
+        [Option('w', "width", Default = 90, HelpText = "Width of the output canvas")]
+        public int Width { get; set; }
+
+        [Option('h', "height", Default = 60, HelpText = "Height of the output canvas")]
+        public int Height { get; set; }
+
         [Usage(ApplicationAlias = "raytracer")]
         public static IEnumerable<Example> Examples
         {

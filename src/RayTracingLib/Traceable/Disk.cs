@@ -15,17 +15,22 @@ namespace RayTracingLib.Traceable
 
         public bool Intersect(Ray ray, out HitResult? hitResult)
         {
-            if (plane.Intersect(ray, out hitResult))
+            HitResult? planeHit = null;
+            hitResult = null;
+            if (plane.Intersect(ray, out planeHit))
             {
-                var point = ray.GetPoint(hitResult!.distance);
+                var point = ray.GetPoint(planeHit!.distance);
                 if ((point - plane.Point).LengthSquared() < radius * radius)
                 {
-                    hitResult.ray = ray;
-                    hitResult.Normal = -plane.Normal;
+                    hitResult = new HitResult()
+                    {
+                        distance = planeHit.distance,
+                        ray = ray,
+                        Normal = -plane.Normal
+                    };
                     return true;
                 }
             }
-            hitResult = null;
             return false;
         }
 

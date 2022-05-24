@@ -4,53 +4,64 @@ namespace Common.ProgressBar
 
     public class EtaProgressBar
     {
-        private readonly int total;
+        private const int REFRESH_COUNT = 100;
+        private const string FORMAT = "{0}: (~{1:F2}s)";
+        private static object locker = new object();
+
         private readonly int refreshRate;
+        private int current;
+        private string label;
+        private int updates;
+        private long startTime;
 
-        private int processed;
-        private int nextProcessed;
+        private readonly ProgressBar bar;
 
-        private long startTimestamp;
-        private readonly ProgressBar defaultProgressBar;
-
-        public EtaProgressBar(int total, int refreshRate)
+        public EtaProgressBar(int total, string label, int refreshRate)
         {
-            this.total = total;
+            this.bar = new ProgressBar(total);
+            this.label = label;
             this.refreshRate = refreshRate;
-            this.defaultProgressBar = new ProgressBar(total);
+            this.current = 0;
+            this.updates = 1;
         }
 
-        public EtaProgressBar(int total) : this(total, total / 100) { }
+        public EtaProgressBar(int total, string label) : this(total, label, total / REFRESH_COUNT) { }
 
-        public void StartTimer()
+        public void Refresh(int value)
         {
-            processed = 0;
-            nextProcessed = 0;
-            startTimestamp = GetNowTimestamp();
-        }
-
-        public void AddAndRefresh(int value, string label)
-        {
-            Interlocked.Add(ref processed, value);
-            if (processed >= nextProcessed)
+            lock (locker)
             {
-                Refresh(processed, label);
-                Interlocked.Add(ref nextProcessed, refreshRate);
+                current = value;
+                if (current >= updates * refreshRate)
+                {
+                    Update(current);
+                    ++updates;
+                }
             }
         }
 
-        private void Refresh(int value, string label)
+        public void Next(int step) => Refresh(Math.Min(current + step, bar.Max));
+
+        public void Next() => Next(1);
+
+        private void Update(int value)
         {
-            long taken = GetNowTimestamp() - startTimestamp;
-            float eta = ((float)taken / value) * (total - value);
-            string etaString = String.Format("{0:F2}", eta / 1000f);
-            string withTimeLabel = $"{label} (~ {etaString}s)";
-            defaultProgressBar.Refresh(value, withTimeLabel);
+            if (startTime == default(long))
+            {
+                startTime = GetNow();
+                bar.Refresh(value, label);
+            }
+            else
+            {
+                float updateTime = (GetNow() - startTime) / (float)(value - 1);
+                float eta = updateTime * (bar.Max - value);
+                bar.Refresh(value, FORMAT, new object[] { label, eta });
+            }
         }
 
-        private long GetNowTimestamp()
+        private long GetNow()
         {
-            return new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+            return new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
         }
     }
 }

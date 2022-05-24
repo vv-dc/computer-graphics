@@ -9,17 +9,20 @@ namespace RayTracer.Renderer
 
     public class ParallelRenderer<PixelType> : IRenderer<PixelType>
     {
-        private static readonly int THREADS_NUMBER = Environment.ProcessorCount;
-
+        private static Random random = new();
         private readonly ITracer tracer;
-
         private readonly IAdapter<PixelType> adapter;
+        private int numTasks;
 
-        public ParallelRenderer(ITracer tracer, IAdapter<PixelType> adapter)
+        public ParallelRenderer(ITracer tracer, IAdapter<PixelType> adapter, int numTasks)
         {
             this.tracer = tracer;
             this.adapter = adapter;
+            this.numTasks = numTasks;
         }
+
+        public ParallelRenderer(ITracer tracer, IAdapter<PixelType> adapter)
+        : this(tracer, adapter, Environment.ProcessorCount) { }
 
         public Image<PixelType> Render(Scene scene)
         {
@@ -27,71 +30,62 @@ namespace RayTracer.Renderer
             adapter.Init(scene.objects);
 
             Camera camera = scene.camera;
-            var random = new Random();
+            var image = new Image<PixelType>(camera.width, camera.height);
 
-            var chunkSize = (int)MathF.Ceiling(camera.height * camera.width / THREADS_NUMBER);
-            var points = GetAllPoints(camera.width, camera.height)
-                .OrderBy(element => random.Next()).ToList(); // shuffle
-
-            return RenderParallel(scene, chunkSize, points);
+            return RenderParallel(scene, image);
         }
 
-        private Image<PixelType> RenderParallel(Scene scene, int chunkSize, List<(int, int)> points)
+        private Image<PixelType> RenderParallel(Scene scene, Image<PixelType> image)
         {
-            var image = new Image<PixelType>(scene.camera.width, scene.camera.height);
-            var progressBar = new EtaProgressBar(image.Width * image.Height);
-            progressBar.StartTimer();
+            var coords = GetPixelCoords(image.Width, image.Height).OrderBy(element => random.Next()).ToList();
+            var size = image.Width * image.Height;
+            var chunkSize = (int)MathF.Ceiling(size / (float)numTasks);
 
-            using (var countdownEvent = new CountdownEvent(THREADS_NUMBER))
+            var progressBar = new EtaProgressBar(size, label: "Render");
+            using (var countdownEvent = new CountdownEvent(numTasks))
             {
-                for (int idx = 0; idx < THREADS_NUMBER; ++idx)
+                for (int idx = 0; idx < numTasks; ++idx)
                 {
                     int start = idx * chunkSize;
-                    int chunkSizeBox = Math.Min(chunkSize, points.Count - start);
-                    var chunk = points.GetRange(start, chunkSizeBox);
+                    var chunk = coords.GetRange(start, Math.Min(chunkSize, size - start));
 
-                    ThreadPool.QueueUserWorkItem(
-                        (x) =>
-                        {
-                            RenderPoints(scene, image, progressBar, chunk);
-                            countdownEvent.Signal();
-                        }
-                    );
+                    ThreadPool.QueueUserWorkItem((_) =>
+                    {
+                        RenderPixels(scene, image, progressBar, chunk);
+                        countdownEvent.Signal();
+                    });
                 }
                 countdownEvent.Wait();
             }
-
             return image;
         }
 
-        private List<(int, int)> GetAllPoints(int width, int height)
-        {
-            var points = new List<(int, int)>();
-            for (int y = 0; y < height; ++y)
-            {
-                for (int x = 0; x < width; ++x)
-                {
-                    points.Add((y, x));
-                }
-            }
-            return points;
-        }
-
-        private void RenderPoints(
+        private void RenderPixels(
             Scene scene,
             Image<PixelType> image,
             EtaProgressBar progressBar,
-            List<(int, int)> points
+            List<(int, int)> coords
         )
         {
             Camera camera = scene.camera;
-            foreach (var (y, x) in points)
+            foreach (var (y, x) in coords)
             {
                 Ray ray = camera.CastRay(x, y);
                 tracer.Trace(ray, out var hitResult);
                 image[y, x] = adapter.Adapt(scene.Light, hitResult);
-                progressBar.AddAndRefresh(1, "Render");
+                progressBar.Next();
             }
+        }
+
+        private List<(int, int)> GetPixelCoords(int width, int height)
+        {
+            var coords = new List<(int, int)>(width * height);
+
+            for (int y = 0; y < height; ++y)
+                for (int x = 0; x < width; ++x)
+                    coords.Add((y, x));
+
+            return coords;
         }
     }
 }
