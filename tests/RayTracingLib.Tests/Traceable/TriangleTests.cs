@@ -19,6 +19,7 @@ namespace RayTracingLib.Tests.Traceable
                 new Point3(0, 0, 1), // B (v1)
                 new Point3(0, 1, 0)  // C (v2)
             ); // look at origin
+            triangle.SetDefaultNormals();
         }
 
         public static void AssertNoIntersection(Triangle triangle, Ray ray)

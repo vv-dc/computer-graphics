@@ -2,11 +2,9 @@ namespace Core.Reader.OBJReader.Parser
 {
     using Common.Numeric;
 
-    public class NormalParser : IObjParser
+    public class NormalParser : IOBJParser
     {
-        private const string entityType = "vn";
-
-        public void Parse(string[] parts, ObjState state)
+        public void Parse(string[] parts, OBJMesh state)
         {
             Vector3 normal = new Vector3(
                 float.Parse(parts[1]),
@@ -15,7 +13,5 @@ namespace Core.Reader.OBJReader.Parser
             );
             state.normals.Add(normal);
         }
-
-        public bool CanParse(string type) => type == entityType;
     }
 }

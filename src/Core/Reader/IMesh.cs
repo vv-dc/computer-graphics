@@ -3,7 +3,7 @@ namespace Core.Reader
     using Common.Numeric;
     using RayTracingLib.Traceable;
 
-    public interface Mesh
+    public interface IMesh
     {
         List<ITraceable> GetTraceables();
 

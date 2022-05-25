@@ -1,64 +1,38 @@
 namespace Core.Reader.OBJReader.Parser
 {
-    public class FaceParser : IObjParser
+    public class FaceParser : IOBJParser
     {
-        private readonly int[,] quadFaceIdxs = new int[,] { { 0, 1, 2 }, { 0, 2, 3 } };
-        private const string entityType = "f";
-
-        public void Parse(string[] parts, ObjState state)
+        public void Parse(string[] parts, OBJMesh state)
         {
-            var numFields = parts[1].Split("/").Length;
-            var hasNormals = numFields >= 3;
+            var verticesNumber = parts.Length - 1;
+            var vertices = new List<FaceVertex>(verticesNumber);
 
-            var numPoints = parts.Length - 1;
-            var points = new int[numPoints];
-            var normals = hasNormals ? new int[numPoints] : null;
-
-            for (int idx = 0; idx < numPoints; ++idx)
+            for (int idx = 0; idx < verticesNumber; ++idx)
             {
-                string[] faceParts = parts[idx + 1].Split("/");
-                points[idx] = MapIdx(int.Parse(faceParts[0]), state.points.Count);
-                if (hasNormals)
-                {
-                    normals![idx] = MapIdx(int.Parse(faceParts[2]), state.normals.Count);
-                }
+                var faceVertex = ParseVertex(parts[idx + 1], verticesNumber);
+                vertices.Add(faceVertex);
             }
-            ExtractFaces(points, normals, state);
+
+            state.faces.Add(new Face() { vertices = vertices });
         }
 
-        private void ExtractFaces(int[] points, int[]? normals, ObjState state)
+        private FaceVertex ParseVertex(string part, int verticesNumber)
         {
-            if (points.Length == 3)
-            {
-                var face = new Face() { normals = normals, points = points };
-                state.faces.Add(face);
-            }
-            else
-            {
-                var hasNormals = normals is not null;
-                for (int faceIdx = 0; faceIdx < 2; ++faceIdx)
-                {
-                    var faceNormals = hasNormals ? new int[3] : null;
-                    var facePoints = new int[3];
+            string[] faceParts = part.Split("/");
+            var faceVertex = new FaceVertex();
+            faceVertex.pointIdx = MapIdx(int.Parse(faceParts[0]), verticesNumber);
 
-                    for (int idx = 0; idx < 3; ++idx)
-                    {
-                        facePoints[idx] = points[quadFaceIdxs[faceIdx, idx]];
-                        if (hasNormals)
-                        {
-                            faceNormals![idx] = normals![quadFaceIdxs[faceIdx, idx]];
-                        }
-                    }
-                    state.faces.Add(new Face() { normals = faceNormals, points = facePoints });
-                }
+            if (faceParts.Length > 2)
+            {
+                faceVertex.normalIdx = MapIdx(int.Parse(faceParts[2]), verticesNumber);
             }
+
+            return faceVertex;
         }
 
         private int MapIdx(int idx, int count)
         {
             return idx > 0 ? idx - 1 : count + idx;
         }
-
-        public bool CanParse(string type) => type == entityType;
     }
 }

@@ -4,31 +4,31 @@ namespace Core.Reader.OBJReader
 
     using Core.Reader.OBJReader.Parser;
     using RayTracer;
-    using RayTracingLib.Traceable;
 
     public class OBJReader
     {
-        private static List<IObjParser> parsers = new List<IObjParser>(){
-            new VertexParser(),
-            new NormalParser(),
-            new FaceParser()
-        };
+        private readonly OBJParserProvider provider;
 
-        public Mesh Read(Scene scene, string path)
+        public OBJReader(OBJParserProvider provider)
+        {
+            this.provider = provider;
+        }
+
+        public IMesh Read(Scene scene, string path)
         {
             return ParseObjects(path);
         }
 
-        private Mesh ParseObjects(string path)
+        private IMesh ParseObjects(string path)
         {
-            ObjState state = new ObjState();
+            OBJMesh state = new OBJMesh();
 
             foreach (string line in GetLinesIterator(path))
             {
                 if (line.StartsWith("#")) continue; // skip comment
                 string[] parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                IObjParser? parser = GetParserNullable(parts);
+                IOBJParser? parser = GetParserNullable(parts);
                 parser?.Parse(parts, state);
             }
 
@@ -40,11 +40,11 @@ namespace Core.Reader.OBJReader
             return File.ReadLines(path, Encoding.UTF8);
         }
 
-        private IObjParser? GetParserNullable(string[] parts)
+        private IOBJParser? GetParserNullable(string[] parts)
         {
             if (parts.Length == 0) return null;
             string entityType = parts[0];
-            return parsers.Find((parser) => parser.CanParse(entityType));
+            return provider.GetObjParserNullable(entityType);
         }
     }
 }

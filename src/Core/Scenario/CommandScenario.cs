@@ -27,16 +27,16 @@ namespace Core.Scenario
                 Light = new DirectionalLight(new Vector3(1, -1, -1))
             };
 
-            var objReader = new OBJReader();
-            Mesh? mesh = null;
+            var objParserProvider = new OBJParserProvider();
+            var objReader = new OBJReader(objParserProvider);
+            IMesh? mesh = null;
 
             Timer.LogTime(() => mesh = objReader.Read(scene, source!), "Read");
 
             mesh!.Transform(
-            // Matrix4x4.CreateTranslation(0, -8f, -40f) *
-            // Matrix4x4.CreateRotationY(45 * Consts.DegToRad) // *
-            // Matrix4x4.CreateRotationX(-90 * Consts.DegToRad) *
-                Matrix4x4.CreateScale(0.5f)
+                Matrix4x4.CreateRotationY(-45 * Consts.DegToRad) *
+                Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
+            // Matrix4x4.CreateScale(0.5f)
             );
             scene.SetObjects(mesh.GetTraceables());
 

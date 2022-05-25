@@ -2,11 +2,9 @@ namespace Core.Reader.OBJReader.Parser
 {
     using Common.Numeric;
 
-    public class VertexParser : IObjParser
+    public class VertexParser : IOBJParser
     {
-        private const string entityType = "v";
-
-        public void Parse(string[] parts, ObjState state)
+        public void Parse(string[] parts, OBJMesh state)
         {
             Point3 vertex = new Point3(
                 float.Parse(parts[1]),
@@ -15,7 +13,5 @@ namespace Core.Reader.OBJReader.Parser
             );
             state.points.Add(vertex);
         }
-
-        public bool CanParse(string type) => type == entityType;
     }
 }
