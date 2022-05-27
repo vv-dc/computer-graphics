@@ -36,14 +36,14 @@ namespace Core.Scenario
 
             mesh!.Transform(
             // Matrix4x4.CreateTranslation(0, -8f, -40f) *
-            Matrix4x4.CreateTranslation(0, -1f, -2.5f) *
-            Matrix4x4.CreateRotationY(30 * Consts.DegToRad)
-            // Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
+            // Matrix4x4.CreateTranslation(0, -1f, -2.5f) *
+            Matrix4x4.CreateRotationY(-45 * Consts.DegToRad) *
+            Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
             // Matrix4x4.CreateScale(0.5f)
             );
 
-            var nodeSplitter = new MiddleNodeSplitter();
-            var tree = new KdTree(mesh.GetTraceables(), nodeSplitter, maxDepth: 25);
+            var nodeSplitter = new MiddleSplitter();
+            var tree = new KdTree(mesh.GetTraceables(), nodeSplitter, maxDepth: 20);
             scene.AddObject(tree);
             // scene.AddObject(tree.Bounds);
             // scene.SetObjects(mesh.GetTraceables());

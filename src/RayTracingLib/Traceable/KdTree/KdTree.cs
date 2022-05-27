@@ -42,8 +42,13 @@ namespace RayTracingLib.Traceable.KdTree
             if (primIdxs.Count <= maxPrims || depth >= maxDepth)
                 return KdTreeNode.InitLeaf(primIdxs);
 
+            splitter.Init(bounds, primIdxs, primsBounds);
+
             var axis = (int)bounds.MaximumExtent();
-            var splitPos = splitter.Split(axis, bounds, primIdxs, primsBounds);
+            if (!splitter.Split(axis, out var splitPos))
+            {
+                return KdTreeNode.InitLeaf(primIdxs);
+            };
 
             List<int> belowIdxs = new(), aboveIdxs = new();
             foreach (var idx in primIdxs)
