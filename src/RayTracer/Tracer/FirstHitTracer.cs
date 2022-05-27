@@ -15,9 +15,9 @@ namespace RayTracer.Tracer
         public bool Trace(Ray ray, out HitResult? hitResult)
         {
             foreach (var sceneObject in sceneObjects)
-            {
-                if (sceneObject.Intersect(ray, out hitResult)) return true;
-            }
+                if (sceneObject.Intersect(ray, out hitResult))
+                    return true;
+
             hitResult = null;
             return false;
         }

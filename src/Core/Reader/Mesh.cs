@@ -1,12 +1,9 @@
 namespace Core.Reader
 {
-    using Common.Numeric;
-    using RayTracingLib.Traceable;
+    using RayTracingLib;
 
-    public interface Mesh
+    public interface Mesh : ITransformable
     {
-        List<ITraceable> GetTraceables();
-
-        void Transform(Matrix4x4 matrix);
+        List<ITreeTraceable> GetTraceables();
     }
 }

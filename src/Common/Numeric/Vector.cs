@@ -16,6 +16,21 @@ namespace Common.Numeric
             X = Y = Z = value;
         }
 
+        public float this[int axis]
+        {
+            get
+            {
+                switch (axis)
+                {
+                    case 0: return X;
+                    case 1: return Y;
+                    case 2: return Z;
+                    default:
+                        throw new IndexOutOfRangeException("Axis is out of bound");
+                }
+            }
+        }
+
         public float Length() => MathF.Sqrt(LengthSquared());
 
         public float LengthSquared() => Dot(this, this);
@@ -32,8 +47,14 @@ namespace Common.Numeric
         public static Vector3 operator *(Vector3 value, float factor) =>
             new(value.X * factor, value.Y * factor, value.Z * factor);
 
+        public static Vector3 operator *(Vector3 left, Vector3 right) =>
+            new(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+
         public static Vector3 operator /(Vector3 value, float factor) =>
             new(value.X / factor, value.Y / factor, value.Z / factor);
+
+        public static Vector3 operator /(float factor, Vector3 value) =>
+            new(factor / value.X, factor / value.Y, factor / value.Z);
 
         public static bool operator ==(Vector3 left, Vector3 right) =>
             (left - right).LengthSquared() < Consts.EPS * Consts.EPS;
@@ -46,6 +67,23 @@ namespace Common.Numeric
 
         public static float Min(Vector3 value) =>
             Math.Min(value.X, Math.Min(value.Y, value.Z));
+
+        public static Vector3 Min(Vector3 left, Vector3 right) =>
+           new(
+               Math.Min(left.X, right.X),
+               Math.Min(left.Y, right.Y),
+               Math.Min(left.Z, right.Z)
+           );
+
+        public static float Max(Vector3 value) =>
+            Math.Max(value.X, Math.Max(value.Y, value.Z));
+
+        public static Vector3 Max(Vector3 left, Vector3 right) =>
+           new(
+               Math.Max(left.X, right.X),
+               Math.Max(left.Y, right.Y),
+               Math.Max(left.Z, right.Z)
+           );
 
         public static Vector3 Cross(Vector3 left, Vector3 right) =>
             new(

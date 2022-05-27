@@ -14,7 +14,7 @@ namespace Core.ArgumentParser
             var parser = new Parser(with => with.HelpWriter = null);
             var parsed = parser.ParseArguments<PredefinedOptions, ModelOptions>(args);
             parsed
-                .WithParsed<PredefinedOptions>(options => Predefined.Run(null, null, options.Width, options.Height))
+                .WithParsed<PredefinedOptions>(options => Predefined.Run(null, options.Output, options.Width, options.Height))
                 .WithParsed<ModelOptions>(options =>
                 {
                     var scenario = new CommandScenario();

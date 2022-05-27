@@ -3,7 +3,7 @@ namespace RayTracingLib.Traceable
     using Common;
     using Common.Numeric;
 
-    public class Cylinder : ITraceable
+    public class Cylinder : ITraceable, ITransformable
     {
         private Point3 point1;
         private Point3 point2;

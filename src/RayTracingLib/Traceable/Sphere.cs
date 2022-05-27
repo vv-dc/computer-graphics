@@ -3,7 +3,7 @@ namespace RayTracingLib.Traceable
     using Common;
     using Common.Numeric;
 
-    public class Sphere : ITraceable
+    public class Sphere : ITraceable, ITransformable
     {
         private Point3 center;
         private float radius;

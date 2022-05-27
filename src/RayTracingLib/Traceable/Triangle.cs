@@ -3,8 +3,10 @@ namespace RayTracingLib.Traceable
     using Common;
     using Common.Numeric;
 
-    public class Triangle : ITraceable
+    public class Triangle : ITreeTraceable, ITransformable
     {
+        private AABB aabb;
+
         private Point3 v0; // A
         private Point3 v1; // B
         private Point3 v2; // C
@@ -18,7 +20,10 @@ namespace RayTracingLib.Traceable
             this.v0 = v0;
             this.v1 = v1;
             this.v2 = v2;
+            UpdateAABB();
         }
+
+        public AABB GetAABB() => aabb;
 
         public void SetNormals(Vector3 n0, Vector3 n1, Vector3 n2)
         {
@@ -90,6 +95,23 @@ namespace RayTracingLib.Traceable
             n0 = Vector3.Normalize(matrix * n0);
             n1 = Vector3.Normalize(matrix * n1);
             n2 = Vector3.Normalize(matrix * n2);
+
+            UpdateAABB();
+        }
+
+        private void UpdateAABB()
+        {
+            var min = new Point3(
+                Math.Min(Math.Min(v0.X, v1.X), v2.X),
+                Math.Min(Math.Min(v0.Y, v1.Y), v2.Y),
+                Math.Min(Math.Min(v0.Z, v1.Z), v2.Z)
+            );
+            var max = new Point3(
+                Math.Max(Math.Max(v0.X, v1.X), v2.X),
+                Math.Max(Math.Max(v0.Y, v1.Y), v2.Y),
+                Math.Max(Math.Max(v0.Z, v1.Z), v2.Z)
+            );
+            aabb = new AABB(min, max);
         }
     }
 }
