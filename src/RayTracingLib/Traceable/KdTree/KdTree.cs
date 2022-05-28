@@ -4,10 +4,13 @@ namespace RayTracingLib.Traceable.KdTree
 
     public class KdTree : ITraceable
     {
+        private const int MIN_NODES = 1024;
+
         private List<ITreeTraceable> prims;
         private AABB bounds;
-        private KdTreeNode root;
+        private List<KdTreeNode> nodes;
         private INodeSplitter splitter;
+        private int nextFreeNode;
         private int maxDepth;
         private int maxPrims;
 
@@ -15,65 +18,79 @@ namespace RayTracingLib.Traceable.KdTree
         {
             this.prims = prims;
             this.splitter = splitter;
-            this.maxDepth = maxDepth;
-            this.maxPrims = maxPrims;
+
+            this.maxDepth = Math.Min(maxDepth, DefaultMaxDepth(prims.Count));
+            this.maxPrims = Math.Min(maxPrims, DefaultMaxPrims());
+
             Timer.LogTime(BuildTree, "Tree build");
         }
 
+        private int DefaultMaxDepth(int count) => (int)(8 + 1.3f * MathF.Log2(count));
+
+        private int DefaultMaxPrims() => 8;
+
         private void BuildTree()
         {
-            var primIdxs = Enumerable.Range(0, prims.Count).ToList();
+            var idxs = Enumerable.Range(0, prims.Count).ToList();
 
-            List<AABB> primsBounds = new();
+            List<AABB> primsBounds = new(prims.Count);
             foreach (var prim in prims)
             {
                 var primBounds = prim.GetAABB();
-                bounds = bounds is null
+                this.bounds = this.bounds is null
                     ? primBounds
-                    : AABB.Union(bounds, primBounds);
+                    : AABB.Union(this.bounds, primBounds);
 
                 primsBounds.Add(primBounds);
             }
-            root = BuildBranch(bounds!, primIdxs, primsBounds);
-        }
 
-        private KdTreeNode BuildBranch(AABB bounds, List<int> primIdxs, List<AABB> primsBounds, int depth = 0)
-        {
-            if (primIdxs.Count <= maxPrims || depth >= maxDepth)
-                return KdTreeNode.InitLeaf(primIdxs);
+            nodes = new List<KdTreeNode>(MIN_NODES);
+            nextFreeNode = -1;
 
-            splitter.Init(bounds, primIdxs, primsBounds);
+            var next = new Stack<(AABB, List<int>, int, int)>();
+            next.Push((this.bounds, idxs, -1, 0));
 
-            var axis = (int)bounds.MaximumExtent();
-            if (!splitter.Split(axis, out var splitPos))
+            while (next.Count > 0)
             {
-                return KdTreeNode.InitLeaf(primIdxs);
-            };
+                var (bounds, primIdxs, parent, depth) = next.Pop();
+                ++nextFreeNode;
 
-            List<int> belowIdxs = new(), aboveIdxs = new();
-            foreach (var idx in primIdxs)
-            {
-                if (primsBounds[idx].Min[axis] <= splitPos)
+                if (parent != -1)
+                    nodes[parent].Above = nextFreeNode;
+
+                if (primIdxs.Count <= maxPrims || depth >= maxDepth)
                 {
-                    belowIdxs.Add(idx);
-                    if (primsBounds[idx].Max[axis] > splitPos) aboveIdxs.Add(idx);
+                    nodes.Add(KdTreeNode.InitLeaf(primIdxs));
+                    continue;
                 }
-                else aboveIdxs.Add(idx);
+                splitter.Init(bounds, primIdxs, primsBounds);
+
+                var axis = (int)bounds.MaximumExtent();
+                if (!splitter.Split(axis, out var splitPos))
+                {
+                    nodes.Add(KdTreeNode.InitLeaf(primIdxs));
+                    continue;
+                }
+
+                List<int> belowIdxs = new(primIdxs.Count), aboveIdxs = new(primIdxs.Count);
+                foreach (var idx in primIdxs)
+                {
+                    if (primsBounds[idx].Min[axis] <= splitPos)
+                    {
+                        belowIdxs.Add(idx);
+                        if (primsBounds[idx].Max[axis] > splitPos) aboveIdxs.Add(idx);
+                    }
+                    else aboveIdxs.Add(idx);
+                }
+
+                AABB belowBounds = (AABB)bounds.Clone(), aboveBounds = (AABB)bounds.Clone();
+                belowBounds.Max[axis] = splitPos; aboveBounds.Min[axis] = splitPos;
+
+                next.Push((aboveBounds, aboveIdxs, nextFreeNode, depth + 1));
+                next.Push((belowBounds, belowIdxs, -1, depth + 1));
+
+                nodes.Add(KdTreeNode.InitInterior((Axis)axis, splitPos, nextFreeNode));
             }
-
-            var belowBounds = (AABB)bounds.Clone();
-            belowBounds.Max[axis] = splitPos;
-
-            var aboveBounds = (AABB)bounds.Clone();
-            aboveBounds.Min[axis] = splitPos;
-
-            var nextNode = KdTreeNode.InitInterior(
-                (Axis)axis,
-                splitPos,
-                BuildBranch(belowBounds, belowIdxs, primsBounds, depth + 1),
-                BuildBranch(aboveBounds, aboveIdxs, primsBounds, depth + 1)
-            );
-            return nextNode;
         }
 
         public bool Intersect(Ray ray, out HitResult? hitResult)
@@ -85,7 +102,7 @@ namespace RayTracingLib.Traceable.KdTree
                 return false;
 
             var next = new Stack<(KdTreeNode, float, float)>();
-            var node = root;
+            var node = nodes[0];
             while (node is not null)
             {
                 if (node.IsLeaf)
@@ -109,10 +126,11 @@ namespace RayTracingLib.Traceable.KdTree
                     var belowFirst = (
                         ray.origin[axis] < node.SplitPos! || (ray.origin[axis] == node.SplitPos! && ray.direction[axis] <= 0)
                     );
-                    var (firstNode, secondNode) = belowFirst
-                        ? (node.Below!, node.Above!)
-                        : (node.Above!, node.Below!);
+                    var (firstIdx, secondIdx) = belowFirst
+                        ? (node.Idx + 1, node.Above)
+                        : (node.Above, node.Idx + 1);
 
+                    var (firstNode, secondNode) = (nodes[firstIdx], nodes[secondIdx]);
                     if (tplane > tmax || tplane <= 0)
                         node = firstNode;
                     else if (tmin > tplane)

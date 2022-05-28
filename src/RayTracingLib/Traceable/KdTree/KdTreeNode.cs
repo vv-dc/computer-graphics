@@ -5,32 +5,30 @@ namespace RayTracingLib.Traceable.KdTree
         private Axis? splitAxis;
         private float splitPos;
         private List<int>? primIdxs;
-        private KdTreeNode? below;
-        private KdTreeNode? above;
+        private int idx;
+        private int above;
 
-        public List<int>? PrimIdxs { get => primIdxs; }
         public Axis? SplitAxis { get => splitAxis; }
         public float SplitPos { get => splitPos; }
-        public KdTreeNode? Below { get => below; }
-        public KdTreeNode? Above { get => above; }
+        public List<int>? PrimIdxs { get => primIdxs; }
+        public int Idx { get => idx; }
+        public int Above { get => above; set => above = value; }
 
-        public KdTreeNode(Axis? splitAxis, float splitPos, List<int>? primIdxs, KdTreeNode? below, KdTreeNode? above)
+        public KdTreeNode(Axis? splitAxis, float splitPos, List<int>? primIdxs, int idx, int above)
         {
             this.splitAxis = splitAxis;
             this.splitPos = splitPos;
             this.primIdxs = primIdxs;
-            this.below = below;
+            this.idx = idx;
             this.above = above;
         }
 
-        public bool IsLeaf => below is null && above is null;
+        public bool IsLeaf => primIdxs is not null;
 
         public static KdTreeNode InitLeaf(List<int> primIdxs) =>
-            new(null, 0, primIdxs, null, null);
+            new(null, 0, primIdxs, -1, -1);
 
-        public static KdTreeNode InitInterior(
-            Axis splitAxis, float splitPos, KdTreeNode below, KdTreeNode above
-        ) =>
-            new(splitAxis, splitPos, null, below, above);
+        public static KdTreeNode InitInterior(Axis splitAxis, float splitPos, int idx) =>
+            new(splitAxis, splitPos, null, idx, -1);
     }
 }
