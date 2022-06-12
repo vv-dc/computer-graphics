@@ -25,11 +25,11 @@ namespace Core.Scenario
                 Light = new DirectionalLight(new Vector3(1, -1, -1))
             };
 
-            var sphere = new Sphere(new Point3(0, 0, -2.5f), 1f);
+            // var sphere = new Sphere(new Point3(0, 0, -2.5f), 1f);
             // // sphere.Transform(
             // //     Matrix4x4.CreateRotationY(Consts.DegToRad * 35)
             // //     * Matrix4x4.CreateScale(0.5f, sphere.Center));
-            scene.AddObject(sphere);
+            // scene.AddObject(sphere);
 
             // var sphere = new Sphere(new Point3(0, 0, -1.25f), 3f);
             // scene.AddObject(sphere);
@@ -59,24 +59,26 @@ namespace Core.Scenario
             // );
             // scene.AddObject(disk);
 
-            var triangle = new Triangle(
-                new Point3(-4f, 0, -2.5f),
-                new Point3(1, -0.5f, -1.25f),
-                new Point3(8, 0.25f, -8)
-            );
-            triangle.SetDefaultNormals();
+            // var triangle = new Triangle(
+            //     new Point3(-4f, 0, -2.5f),
+            //     new Point3(1, -0.5f, -1.25f),
+            //     new Point3(8, 0.25f, -8)
+            // );
+            // triangle.SetDefaultNormals();
             // triangle.Transform(Matrix4x4.CreateRotationX(Consts.DegToRad * -45));
-            scene.AddObject(triangle);
+            // scene.AddObject(triangle);
 
             var tracer = new BasicTracer();
             var shadowTracer = new FirstHitTracer();
 
             var intensityAdapter = new IntensityShadowAdapter(shadowTracer);
-            var renderer = new BasicRenderer<Intensity>(tracer, intensityAdapter);
+            var adapter = new ColorAdapter(intensityAdapter);
+            var renderer = new BasicRenderer<Color>(tracer, adapter);
+            // var renderer = new BasicRenderer<Intensity>(tracer, intensityAdapter);
 
             var image = renderer.Render(scene);
-            var writer = new ConsoleWriter();
-            writer.Write(image, "console");
+            var writer = new PNGWriter();
+            writer.Write(image, output!);
         }
     }
 }

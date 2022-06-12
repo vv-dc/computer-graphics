@@ -3,7 +3,7 @@ namespace RayTracingLib.Traceable
     using Common;
     using Common.Numeric;
 
-    public class Plane : ITraceable
+    public class Plane : ITraceable, ITransformable
     {
         private Vector3 normal;
         private Point3 point;

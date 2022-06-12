@@ -16,16 +16,12 @@ namespace RayTracer.Tracer
         {
             hitResult = null;
             foreach (var sceneObject in sceneObjects)
-            {
                 if (sceneObject.Intersect(ray, out HitResult? currentHit))
                 {
-                    if (currentHit?.distance > hitResult?.distance)
-                    {
+                    if (currentHit?.distance >= hitResult?.distance)
                         continue;
-                    }
                     hitResult = currentHit;
                 }
-            }
             return hitResult is not null;
         }
     }

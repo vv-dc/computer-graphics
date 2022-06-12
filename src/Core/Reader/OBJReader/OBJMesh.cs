@@ -1,7 +1,9 @@
 namespace Core.Reader.OBJReader
 {
     using Common.Numeric;
+    using Core.Reader;
     using Core.Reader.OBJReader.Parser;
+    using RayTracingLib;
     using RayTracingLib.Traceable;
 
     public class OBJMesh : IMesh
@@ -10,9 +12,9 @@ namespace Core.Reader.OBJReader
         public readonly List<Vector3> normals = new();
         public readonly List<Parser.Face> faces = new();
 
-        public List<ITraceable> GetTraceables()
+        public List<ITreeTraceable> GetTraceables()
         {
-            var triangles = new List<ITraceable>(faces.Count);
+            var triangles = new List<ITreeTraceable>(faces.Count);
 
             foreach (var face in faces)
             {

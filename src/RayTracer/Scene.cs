@@ -1,7 +1,7 @@
 namespace RayTracer
 {
+    using RayTracingLib;
     using RayTracingLib.Light;
-    using RayTracingLib.Traceable;
 
     public class Scene
     {

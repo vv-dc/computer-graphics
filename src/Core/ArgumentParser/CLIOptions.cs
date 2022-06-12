@@ -6,6 +6,9 @@ namespace Core.ArgumentParser
     [Verb("predefined", isDefault: true, HelpText = "Render a predefinded (compiled) scene")]
     public class PredefinedOptions
     {
+        [Option('o', "output", Default = "predefined.png", HelpText = "Path to an image file where rendered model will be stored")]
+        public string Output { get; set; }
+
         [Option('w', "width", Default = 90, HelpText = "Width of the output canvas")]
         public int Width { get; set; }
 

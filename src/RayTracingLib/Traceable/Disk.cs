@@ -2,7 +2,7 @@ namespace RayTracingLib.Traceable
 {
     using Common.Numeric;
 
-    public class Disk : ITraceable
+    public class Disk : ITraceable, ITransformable
     {
         private Plane plane;
         private float radius;
