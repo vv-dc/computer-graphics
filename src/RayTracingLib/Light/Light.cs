@@ -15,6 +15,8 @@ namespace RayTracingLib.Light
         }
 
         public abstract LightShading ComputeShading(HitResult hitResult);
+
+        public abstract Color ComputeIntensity(Vector3 wi);
     }
 
     public struct LightShading

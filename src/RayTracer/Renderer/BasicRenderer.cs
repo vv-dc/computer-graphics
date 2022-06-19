@@ -32,7 +32,7 @@ namespace RayTracer.Renderer
                 {
                     Ray ray = camera.CastRay(x, y);
                     tracer.Trace(ray, out var hitResult);
-                    image[y, x] = adapter.Adapt(scene.Light, hitResult);
+                    image[y, x] = adapter.Adapt(scene.lights, hitResult);
                     progressBar.Next();
                 }
             }

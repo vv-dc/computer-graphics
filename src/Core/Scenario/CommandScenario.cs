@@ -14,6 +14,7 @@ namespace Core.Scenario
     using RayTracingLib.Material;
     using RayTracingLib.Light;
     using RayTracingLib.Traceable;
+    using RayTracingLib.Traceable.KdTree;
 
     public class CommandScenario : IScenario
     {
@@ -27,7 +28,17 @@ namespace Core.Scenario
 
             var scene = new Scene(camera)
             {
-                Light = new DirectionalLight(new Vector3(1, -1, -1), new Color(1, 0, 0))
+                lights = new List<Light> {
+                    new DirectionalLight(new Vector3(1, -1, -1), Color.White),
+                    // new DirectionalLight(new Vector3(0, -1, 0), new Color(1, 1, 1))
+                    // new PointLight(new Point3(0f, -0.25f, 0f), Color.White),
+                    // new PointLight(new Point3(0f, 0.2f, 0.1f), Color.White),
+                    new PointLight(new Point3(-0.3f, 0.6f, -0.3f), new Color(1, 1, 0)),
+                    new EnvironmentalLight(
+                        //new Color(1, 0.980f, 0.804f), 
+                        Color.White,
+                        1f) // YELLOW
+                }
             };
 
             var objParserProvider = new OBJParserProvider();
@@ -44,21 +55,13 @@ namespace Core.Scenario
             // Matrix4x4.CreateScale(0.5f)
             );
 
-            // var nodeSplitter = new SAHSplitter();
-            // var tree = new KdTree(mesh.GetTraceables(), nodeSplitter, maxDepth: 20, maxPrims: 16);
-            // var sceneObject = new RenderableObject(tree, new MirrorMaterial(
-            //     // Color.Green
-            // ));
             // scene.AddObject(sceneObject);
             // scene.AddObject(tree.Bounds);
             // scene.SetObjects(mesh.GetTraceables());
 
-            // var sphere = new Sphere(new Point3(-0.3f, 0, 0.2f), 0.3f);
-            // scene.AddObject(new RenderableObject(sphere, new LambertianMaterial(Color.Black)));
-
             var sphere1 = new Sphere(new Point3(0.25f, 0, 0.15f), 0.2f);
             scene.AddObject(new RenderableObject(sphere1, new LambertianMaterial(
-                Color.White
+                Color.Red
             )));
 
             var sphere2 = new Sphere(new Point3(0.25f, 0.31f, 0.15f), 0.1f);
@@ -71,16 +74,36 @@ namespace Core.Scenario
 
             )));
 
-            var sphere4 = new Sphere(new Point3(0, -10.2f, 0f), 10f);
-            scene.AddObject(new RenderableObject(sphere4, new MirrorMaterial(
-                // Color.White
-                )
-            ));
+            // var sphere4 = new Sphere(new Point3(0, -10.2f, 0f), 10f);
+            // scene.AddObject(new RenderableObject(sphere4, new MirrorMaterial(
+            //     // Color.White
+            //     )
+            // ));
+
+            var plane = new Plane(new Vector3(0, -1, 0), new Point3(0, 0, 0));
+            scene.AddObject(new RenderableObject(plane, new LambertianMaterial(
+                Color.Green
+            )));
+            plane.Transform(
+                Matrix4x4.CreateTranslation(0, -0.3f, 0)
+            );
 
             var sphere5 = new Sphere(new Point3(-0.4f, 0, 0.3f), 0.2f);
             scene.AddObject(new RenderableObject(sphere5, new LambertianMaterial(
                 Color.Blue
             )));
+
+            // var sphere5 = new Sphere(new Point3(0.3f, 0, 0), 0.4f);
+            // scene.AddObject(new RenderableObject(sphere5, new LambertianMaterial(
+            //     Color.Blue
+            // )));
+
+            // var nodeSplitter = new SAHSplitter();
+            // var tree = new KdTree(mesh.GetTraceables(), nodeSplitter, maxDepth: 20, maxPrims: 16);
+            // var sceneObject = new RenderableObject(tree, new LambertianMaterial(
+            //     Color.White
+            // ));
+            // scene.AddObject(sceneObject);
 
             var tracer = new BasicTracer();
             var shadowTracer = new FirstHitTracer();

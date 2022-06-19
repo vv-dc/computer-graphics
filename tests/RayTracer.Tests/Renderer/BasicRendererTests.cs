@@ -49,7 +49,7 @@ namespace RayTracer.Tests.Renderer
             var camera = new Camera(2, 2, 30, new Point3(0), new Vector3(0, 0, -1));
             var scene = new Scene(camera)
             {
-                Light = new DirectionalLight(new Vector3(0, 0, -1), Color.White)
+                lights = new List<Light> { new DirectionalLight(new Vector3(0, 0, -1), Color.White) }
             };
             var tracer = new BasicTracer();
             var adapter = new IntensityAdapter();
@@ -71,7 +71,7 @@ namespace RayTracer.Tests.Renderer
             var camera = new Camera(4, 4, 30, new Point3(0), new Vector3(0, 0, -1));
             var scene = new Scene(camera)
             {
-                Light = new DirectionalLight(new Vector3(0, 0, -1), Color.White)
+                lights = new List<Light> { new DirectionalLight(new Vector3(0, 0, -1), Color.White) }
             };
             var tracer = new BasicTracer();
             var adapter = new IntensityAdapter();

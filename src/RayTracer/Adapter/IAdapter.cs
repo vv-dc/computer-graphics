@@ -6,7 +6,7 @@ namespace RayTracer.Adapter
 
     public interface IAdapter<PixelType>
     {
-        public PixelType Adapt(Light light, HitResult? hitResult);
+        public PixelType Adapt(List<Light> lights, HitResult? hitResult);
 
         void Init(List<RenderableObject> sceneObjects);
     }

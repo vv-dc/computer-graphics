@@ -13,24 +13,15 @@ namespace RayTracingLib.Material.BRDF
 
         public float Diffuse(Vector3 wi, Vector3 wo)
         {
-            return coeff / MathF.PI;
+            return coeff; /// MathF.PI;
         }
 
         public float Sample(HitResult hitResult, out Vector3 wi)
         {
-            var wo = hitResult.ray.direction;
-            wi = hitResult.Normal + ComposeRandomUnit(3);
-            return Diffuse(wi, wo);
-        }
-
-        private Vector3 ComposeRandomUnit(int samples)
-        {
-            var composed = new Vector3(0, 0, 0);
-            for (var idx = 0; idx < samples; ++idx)
-            {
-                composed += Vector3.GetRandomUnit();
-            }
-            return composed / samples;
+            // var wo = hitResult.ray.direction;
+            wi = hitResult.Normal + Vector3.GetRandomOnHemisphere(hitResult.Normal);
+            // return Diffuse(wi, wo);
+            return 0f;
         }
     }
 }

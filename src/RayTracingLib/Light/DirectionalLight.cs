@@ -26,5 +26,10 @@ namespace RayTracingLib.Light
                 distance = float.PositiveInfinity,
             };
         }
+
+        public override Color ComputeIntensity(Vector3 wi)
+        {
+            return Color.Black;
+        }
     }
 }

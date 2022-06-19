@@ -21,7 +21,9 @@ namespace Core.Scenario
 
             var scene = new Scene(camera)
             {
-                Light = new DirectionalLight(new Vector3(1, -1, -1), Color.White, 1)
+                lights = new List<Light> {
+                    new DirectionalLight(new Vector3(1, -1, -1), Color.White, 1)
+                }
             };
 
             // var sphere = new Sphere(new Point3(0, 0, -2.5f), 1f);

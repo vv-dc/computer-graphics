@@ -8,7 +8,6 @@ namespace RayTracingLib
         public static readonly Color Green = new Color(0, 1, 0);
         public static readonly Color Blue = new Color(0, 0, 1);
         public static readonly Color Steel = new Color(0.275f, 0.510f, 0.706f);
-
         public static readonly Color Mirror = new Color(0.5f, 0.7f, 1);
 
         public readonly float r;
@@ -31,12 +30,6 @@ namespace RayTracingLib
         {
             r = value; g = value; b = value;
         }
-
-        // public Color(byte r, byte g, byte b) {
-        //     this.r = r / 255f;
-        //     this.g = g / 255f;
-        //     this.b = b / 255f;
-        // }
 
         public static Color operator *(Color color, float intensity) => new Color(
             color.r * intensity,

@@ -8,11 +8,18 @@ namespace RayTracer.Adapter
     {
         public void Init(List<RenderableObject> sceneObjects) { }
 
-        public Intensity Adapt(Light light, HitResult? hitResult)
+        public Intensity Adapt(List<Light> lights, HitResult? hitResult)
         {
             if (hitResult is null) return Intensity.Background;
-            var shading = light.ComputeShading(hitResult);
-            return Vector3.Dot(-shading.direction, hitResult.Normal);
+            var intensity = 0.0f;
+
+            foreach (var light in lights)
+            {
+                var shading = light.ComputeShading(hitResult);
+                intensity += Vector3.Dot(shading.direction, hitResult.Normal);
+            }
+
+            return intensity;
         }
     }
 }

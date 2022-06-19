@@ -9,7 +9,7 @@ namespace RayTracer
 
         public List<RenderableObject> objects { get; private set; }
 
-        public Light Light { get; set; }
+        public List<Light> lights { get; set; }
 
         public Scene(Camera camera)
         {

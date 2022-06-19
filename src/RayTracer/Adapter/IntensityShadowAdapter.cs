@@ -20,18 +20,23 @@ namespace RayTracer.Adapter
             shadowTracer.Init(sceneObjects);
         }
 
-        public Intensity Adapt(Light light, HitResult? hitResult)
+        public Intensity Adapt(List<Light> lights, HitResult? hitResult)
         {
             if (hitResult is null) return Intensity.Background;
+            var intensity = 0.0f;
 
-            var shading = light.ComputeShading(hitResult);
-            var intensity = Vector3.Dot(-shading.direction, hitResult.Normal);
+            foreach (var light in lights)
+            {
+                var shading = light.ComputeShading(hitResult);
+                var current = Vector3.Dot(-shading.direction, hitResult.Normal);
 
-            var hitPoint = hitResult.ray.GetPoint(hitResult.distance) + hitResult.Normal * Consts.SHADOW_EPS;
-            var shadowRay = new Ray(hitPoint, -shading.direction);
-            var hit = shadowTracer.Trace(shadowRay, out var shadowHitResult);
+                var hitPoint = hitResult.ray.GetPoint(hitResult.distance) + hitResult.Normal * Consts.SHADOW_EPS;
+                var shadowRay = new Ray(hitPoint, -shading.direction);
+                var hit = shadowTracer.Trace(shadowRay, out var shadowHitResult);
+                intensity += hit ? 0 : current;
+            }
 
-            return hit ? 0 : intensity;
+            return intensity;
         }
     }
 }

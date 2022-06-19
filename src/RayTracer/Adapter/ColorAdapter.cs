@@ -19,18 +19,14 @@ namespace RayTracer.Adapter
             intensityAdapter.Init(sceneObjects);
         }
 
-        public Color Adapt(Light light, HitResult? hitResult)
+        public Color Adapt(List<Light> lights, HitResult? hitResult)
         {
-            Intensity intensity = intensityAdapter.Adapt(light, hitResult);
+            Intensity intensity = intensityAdapter.Adapt(lights, hitResult);
             if (Math.Abs(intensity - Intensity.Background) < Consts.EPS)
             {
                 return Color.Steel;
             }
-            byte value = (byte)(Math.Max(intensity, 0) * 255);
             return hitResult!.material.Color * Math.Max(intensity, 0);
-
-
-            // return new Color(value);
         }
     }
 }

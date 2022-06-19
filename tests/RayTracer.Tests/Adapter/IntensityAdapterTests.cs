@@ -2,6 +2,7 @@ namespace RayTracer.Tests.Adapter
 {
     using Xunit;
 
+    using System.Collections.Generic;
     using Common.Numeric;
     using RayTracer.Adapter;
     using RayTracingLib;
@@ -16,7 +17,7 @@ namespace RayTracer.Tests.Adapter
             var light = new DirectionalLight(new Vector3(0, 0, -1), Color.White);
             var hitResult = new HitResult() { Normal = new Vector3(0, 0, 1) };
 
-            var actual = adapter.Adapt(light, hitResult);
+            var actual = adapter.Adapt(new List<Light> { light }, hitResult);
             var expected = -Vector3.Dot(light.Direction, hitResult.Normal);
             Assert.Equal(actual.Value, expected);
         }
