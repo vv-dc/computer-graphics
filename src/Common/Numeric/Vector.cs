@@ -96,5 +96,25 @@ namespace Common.Numeric
             left.X * right.X + left.Y * right.Y + left.Z * right.Z;
 
         public override string ToString() => $"Vector3<({X}, {Y}, {Z})>";
+
+        public static Vector3 Reflect(Vector3 left, Vector3 right)
+        {
+            var dot = Vector3.Dot(left, right);
+            return left - (right * 2 * dot);
+        }
+
+        // https://math.stackexchange.com/questions/44689/how-to-find-a-random-axis-or-unit-vector-in-3d
+        public static Vector3 GetRandomUnit()
+        {
+            var rnd = new Random();
+            var angle = (float)(rnd.NextDouble() * 2 * MathF.PI);
+            var z = (float)(rnd.NextDouble() * 2 - 1);
+
+            var multZ = MathF.Sqrt(1 - z * z);
+            var x = multZ * MathF.Cos(angle);
+            var y = multZ * MathF.Sin(angle);
+
+            return new(x, y, z);
+        }
     }
 }

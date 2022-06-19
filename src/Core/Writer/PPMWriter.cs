@@ -1,14 +1,14 @@
 namespace Core.Writer
 {
-    using System;
     using System.IO;
     using System.Text;
 
     using RayTracer;
+    using RayTracingLib;
 
-    public class PPMWriter : IWriter<Color>
+    public class PPMWriter : IWriter<RayTracingLib.Color>
     {
-        public void Write(Image<Color> image, string target)
+        public void Write(Image<RayTracingLib.Color> image, string target)
         {
             string imageBuffer = ComposeImage(image);
             using (StreamWriter stream = BuildStreamWriter(target))
@@ -32,7 +32,7 @@ namespace Core.Writer
             {
                 for (int x = 0; x < image.Width; ++x)
                 {
-                    string triplet = ComposeTriplet(image[y, x]);
+                    string triplet = ComposeTriplet(image[y, x].Normalize());
                     body.AppendLine(triplet);
                 }
             }

@@ -3,16 +3,16 @@ namespace RayTracer.Adapter
     using Common.Numeric;
     using RayTracingLib;
     using RayTracingLib.Light;
-    using RayTracingLib.Traceable;
 
     public class IntensityAdapter : IAdapter<Intensity>
     {
-        public void Init(List<ITraceable> sceneObjects) { }
+        public void Init(List<RenderableObject> sceneObjects) { }
 
-        public Intensity Adapt(DirectionalLight light, HitResult? hitResult)
+        public Intensity Adapt(Light light, HitResult? hitResult)
         {
             if (hitResult is null) return Intensity.Background;
-            return Vector3.Dot(-light.Direction, hitResult.Normal);
+            var shading = light.ComputeShading(hitResult);
+            return Vector3.Dot(-shading.direction, hitResult.Normal);
         }
     }
 }

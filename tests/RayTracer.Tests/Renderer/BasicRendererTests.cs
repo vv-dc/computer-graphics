@@ -10,7 +10,9 @@ namespace RayTracer.Tests.Renderer
     using RayTracer.Adapter;
     using RayTracer.Renderer;
     using RayTracer.Tracer;
+    using RayTracingLib;
     using RayTracingLib.Light;
+    using RayTracingLib.Material;
     using RayTracingLib.Traceable;
 
     public class BasicRendererTests
@@ -47,7 +49,7 @@ namespace RayTracer.Tests.Renderer
             var camera = new Camera(2, 2, 30, new Point3(0), new Vector3(0, 0, -1));
             var scene = new Scene(camera)
             {
-                Light = new DirectionalLight(new Vector3(0, 0, -1))
+                Light = new DirectionalLight(new Vector3(0, 0, -1), Color.White)
             };
             var tracer = new BasicTracer();
             var adapter = new IntensityAdapter();
@@ -69,14 +71,15 @@ namespace RayTracer.Tests.Renderer
             var camera = new Camera(4, 4, 30, new Point3(0), new Vector3(0, 0, -1));
             var scene = new Scene(camera)
             {
-                Light = new DirectionalLight(new Vector3(0, 0, -1))
+                Light = new DirectionalLight(new Vector3(0, 0, -1), Color.White)
             };
             var tracer = new BasicTracer();
             var adapter = new IntensityAdapter();
             var renderer = new BasicRenderer<Intensity>(tracer, adapter);
 
             var sphere = new Sphere(new Point3(-0.2f, 0.2f, -3), 0.5f);
-            scene.AddObject(sphere);
+            var sceneObject = new RenderableObject(sphere, new LambertianMaterial(Color.Black));
+            scene.AddObject(sceneObject);
 
             var image = renderer.Render(scene);
             Assert.NotNull(image);

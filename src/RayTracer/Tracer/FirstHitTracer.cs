@@ -5,9 +5,9 @@ namespace RayTracer.Tracer
 
     public class FirstHitTracer : ITracer
     {
-        private List<ITraceable> sceneObjects = new();
+        private List<RenderableObject> sceneObjects = new();
 
-        public void Init(List<ITraceable> sceneObjects)
+        public void Init(List<RenderableObject> sceneObjects)
         {
             this.sceneObjects = sceneObjects;
         }
@@ -15,9 +15,9 @@ namespace RayTracer.Tracer
         public bool Trace(Ray ray, out HitResult? hitResult)
         {
             foreach (var sceneObject in sceneObjects)
-                if (sceneObject.Intersect(ray, out hitResult))
-                    return true;
-
+            {
+                if (sceneObject.Traceable.Intersect(ray, out hitResult)) return true;
+            }
             hitResult = null;
             return false;
         }

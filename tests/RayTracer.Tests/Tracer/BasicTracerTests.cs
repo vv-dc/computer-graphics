@@ -7,6 +7,7 @@ namespace RayTracer.Tests.Tracer
     using Common.Numeric;
     using RayTracer.Tracer;
     using RayTracingLib;
+    using RayTracingLib.Material;
     using RayTracingLib.Traceable;
 
     public class BasicTracerTests
@@ -28,8 +29,11 @@ namespace RayTracer.Tests.Tracer
         {
             var ray = new Ray(new Point3(0), new Vector3(0, 0, -1));
             var tracer = new BasicTracer();
-            var sceneObjects = new List<ITraceable> {
-                new Sphere(new Point3(100), 1),
+            var sceneObjects = new List<RenderableObject> {
+                new RenderableObject(
+                    new Sphere(new Point3(100), 1),
+                    new LambertianMaterial(Color.Black)
+                )
             };
             tracer.Init(sceneObjects);
 
@@ -44,9 +48,9 @@ namespace RayTracer.Tests.Tracer
         {
             var ray = new Ray(new Point3(0), new Vector3(0, 0, -1));
             var tracer = new BasicTracer();
-            var sceneObjects = new List<ITraceable> {
-                new Sphere(new Point3(0), 1),
-                new Sphere(new Point3(0), 2),
+            var sceneObjects = new List<RenderableObject> {
+                new RenderableObject(new Sphere(new Point3(0), 1), new LambertianMaterial(Color.Black)),
+                new RenderableObject(new Sphere(new Point3(0), 2), new LambertianMaterial(Color.Black))
             };
             tracer.Init(sceneObjects);
 

@@ -7,25 +7,25 @@ namespace RayTracer
     {
         public readonly Camera camera;
 
-        public List<ITraceable> objects { get; private set; }
+        public List<RenderableObject> objects { get; private set; }
 
-        public DirectionalLight Light { get; set; }
+        public Light Light { get; set; }
 
         public Scene(Camera camera)
         {
             this.camera = camera;
-            this.objects = new List<ITraceable>();
+            this.objects = new List<RenderableObject>();
         }
 
-        public void AddObject(ITraceable sceneObject)
+        public void AddObject(RenderableObject sceneObject)
         {
             objects.Add(sceneObject);
         }
 
-        public void SetObjects(List<ITraceable> sceneObjects)
+        public void SetObjects(List<RenderableObject> sceneObjects)
         {
             // shallow copy
-            objects = new List<ITraceable>(sceneObjects);
+            objects = new List<RenderableObject>(sceneObjects);
         }
     }
 }

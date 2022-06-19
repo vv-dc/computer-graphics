@@ -1,14 +1,13 @@
 namespace Core.Scenario
 {
-    using Common;
     using Common.Numeric;
     using Core.Writer;
     using RayTracer;
     using RayTracer.Adapter;
     using RayTracer.Renderer;
     using RayTracer.Tracer;
+    using RayTracingLib;
     using RayTracingLib.Light;
-    using RayTracingLib.Traceable;
 
     public class ConsoleScenario : IScenario
     {
@@ -22,7 +21,7 @@ namespace Core.Scenario
 
             var scene = new Scene(camera)
             {
-                Light = new DirectionalLight(new Vector3(1, -1, -1))
+                Light = new DirectionalLight(new Vector3(1, -1, -1), Color.White, 1)
             };
 
             // var sphere = new Sphere(new Point3(0, 0, -2.5f), 1f);

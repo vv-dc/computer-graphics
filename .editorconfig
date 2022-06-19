@@ -10,6 +10,7 @@ insert_final_newline = true
 
 [*.{cs,vb}]
 dotnet_diagnostic.CS8618.severity = none # nullable properties
+csharp_preserve_single_line_statements = true # allow single line statements
 
 [{*.yml,*.json}]
 indent_size = 2
