@@ -29,13 +29,13 @@ namespace Core.Scenario
             var scene = new Scene(camera)
             {
                 lights = new List<Light> {
-                    new DirectionalLight(new Vector3(1, -1, -1), Color.White),
-                    // new DirectionalLight(new Vector3(0, -1, 0), new Color(1, 1, 1))
+                    // new DirectionalLight(new Vector3(1, -1, -1), Color.White),
+                    // new DirectionalLight(new Vector3(0, -1, 0), new Color(1, 1, 1)),
                     // new PointLight(new Point3(0f, -0.25f, 0f), Color.White),
                     // new PointLight(new Point3(0f, 0.2f, 0.1f), Color.White),
-                    new PointLight(new Point3(-0.3f, 0.6f, -0.3f), new Color(1, 1, 0)),
+                    new PointLight(new Point3(0, 0, 0.6f), new Color(0.9f, 0.9f, 0.2f), 1),
                     new EnvironmentalLight(
-                        //new Color(1, 0.980f, 0.804f), 
+                        //new Color(1, 0.980f, 0.804f),
                         Color.White,
                         1f) // YELLOW
                 }
@@ -80,13 +80,13 @@ namespace Core.Scenario
             //     )
             // ));
 
-            var plane = new Plane(new Vector3(0, -1, 0), new Point3(0, 0, 0));
-            scene.AddObject(new RenderableObject(plane, new LambertianMaterial(
-                Color.Green
-            )));
-            plane.Transform(
-                Matrix4x4.CreateTranslation(0, -0.3f, 0)
-            );
+            // var plane = new Plane(new Vector3(0, -1, 0), new Point3(0, 0, 0));
+            // scene.AddObject(new RenderableObject(plane, new LambertianMaterial(
+            //     Color.Green
+            // )));
+            // plane.Transform(
+            //     Matrix4x4.CreateTranslation(0, -0.3f, 0)
+            // );
 
             var sphere5 = new Sphere(new Point3(-0.4f, 0, 0.3f), 0.2f);
             scene.AddObject(new RenderableObject(sphere5, new LambertianMaterial(
