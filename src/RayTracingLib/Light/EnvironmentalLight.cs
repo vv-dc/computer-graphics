@@ -10,9 +10,9 @@ namespace RayTracingLib.Light
         {
             return new LightShading()
             {
-                direction = hitResult.Normal + Vector3.GetRandomOnHemisphere(hitResult.Normal),
+                direction = -Vector3.GetRandomOnHemisphere(hitResult.Normal),
                 color = color * intensity,
-                distance = float.PositiveInfinity
+                distance = float.PositiveInfinity,
             };
         }
 

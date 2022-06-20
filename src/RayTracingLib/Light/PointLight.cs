@@ -1,6 +1,7 @@
 namespace RayTracingLib.Light
 {
     using Common.Numeric;
+    using Common;
 
     public class PointLight : Light
     {
@@ -14,11 +15,10 @@ namespace RayTracingLib.Light
         public override LightShading ComputeShading(HitResult hitResult)
         {
             var hitPoint = hitResult.ray.GetPoint(hitResult.distance);
-            var difference = hitPoint - point;
-            var direction = new Vector3(difference.X, difference.Y, difference.Z);
+            var direction = hitPoint - point;
 
             var sqrRadius = direction.LengthSquared();
-            var radius = (float)Math.Sqrt(sqrRadius);
+            var radius = MathF.Sqrt(sqrRadius);
 
             return new LightShading()
             {
@@ -30,12 +30,11 @@ namespace RayTracingLib.Light
 
         public override Color ComputeIntensity(Vector3 wi)
         {
-            var direction = wi - new Vector3(point.X, point.Y, point.Z);
-            var sqrDistance = direction.LengthSquared();
-            return GetLightIntensity(sqrDistance);
+            return Color.Black;
         }
 
-        private Color GetLightIntensity(float sqrRadius) {
+        private Color GetLightIntensity(float sqrRadius)
+        {
             var lightIntensity = intensity / (4 * MathF.PI * sqrRadius);
             return color * lightIntensity;
         }

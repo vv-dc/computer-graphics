@@ -12,7 +12,7 @@ namespace RayTracer.Adapter
 
         private const float REFLECT_BIAS = 0.00001f;
 
-        private const int SAMPLES_PER_PIXES = 3;
+        private const int DIFFUSE_SAMPLES = 4;
 
         private ITracer tracer;
 
@@ -32,7 +32,7 @@ namespace RayTracer.Adapter
 
         public Color Adapt(List<Light> lights, HitResult? hitResult)
         {
-            if (hitResult is null) return Color.Steel; // background
+            if (hitResult is null) return ComposeEnviromentalLighting(lights);
             var color = Color.Black;
 
             foreach (var light in lights)
@@ -43,15 +43,36 @@ namespace RayTracer.Adapter
             return color;
         }
 
+        private Color ComposeEnviromentalLighting(List<Light> lights)
+        {
+            var color = Color.Black;
+            foreach (var light in lights)
+            {
+                if (light is not EnvironmentalLight) continue;
+                color += light.color * light.intensity;
+            }
+            return color;
+        }
+
         private Color ComposeLighting(HitResult hitResult, Light light, int depth)
         {
-            return GetDiffuseLighting(hitResult, light) + GetReflectLighting(hitResult, light, depth);
+            return ComposeDiffuseLighting(hitResult, light) + ComposeReflectLighting(hitResult, light, depth);
+        }
+
+        private Color ComposeDiffuseLighting(HitResult hitResult, Light light)
+        {
+            var totalColor = Color.Black;
+            for (int idx = 0; idx < DIFFUSE_SAMPLES; ++idx)
+            {
+                totalColor += GetDiffuseLighting(hitResult, light);
+            }
+            return totalColor / DIFFUSE_SAMPLES;
         }
 
         private Color GetDiffuseLighting(HitResult hitResult, Light light)
         {
-            var shading = light.ComputeShading(hitResult);
             var direction = hitResult.ray.direction;
+            var shading = light.ComputeShading(hitResult);
             var color = hitResult.material.Diffuse(direction, direction);
             var shadowMultiplier = GetShadowMultiplier(hitResult, shading);
             return color * shadowMultiplier * shading.color;
@@ -63,23 +84,20 @@ namespace RayTracer.Adapter
             var hitPoint = hitResult.ray.GetPoint(hitResult.distance) + hitResult.Normal * Consts.SHADOW_EPS;
             var shadowRay = new Ray(hitPoint, -shading.direction);
             var hit = shadowTracer.Trace(shadowRay, out var shadowHitResult);
-            return hit ? 0 : Math.Max(intensity, 0);
+            return hit && shadowHitResult!.distance <= shading.distance ? 0 : Math.Max(intensity, 0);
         }
 
-        private Color GetReflectLighting(HitResult hitResult, Light light, int depth)
+        private Color ComposeReflectLighting(HitResult hitResult, Light light, int depth)
         {
-            var composed = Color.Black;
-            if (depth == 0) return composed;
+            if (depth == 0) return Color.Black;
 
-            for (var idx = 0; idx < SAMPLES_PER_PIXES; ++idx)
-            {
-                var attenuation = hitResult.material.Scatter(hitResult, out var wi);
-                if (attenuation > 0)
-                    composed += ReflectRay(hitResult, wi, light, depth) * attenuation;
-            }
+            var attenuation = hitResult.material.Reflect(hitResult, out var wi);
+            var composed = attenuation > 0
+                ? ReflectRay(hitResult, wi, light, depth) * attenuation
+                : Color.Black;
 
             var shading = light.ComputeShading(hitResult);
-            return hitResult.material.Color * composed / SAMPLES_PER_PIXES;
+            return hitResult.material.Color * composed;
         }
 
         private Color ReflectRay(HitResult hitResult, Vector3 wi, Light light, int depth)

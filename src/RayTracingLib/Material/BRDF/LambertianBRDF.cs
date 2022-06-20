@@ -13,7 +13,7 @@ namespace RayTracingLib.Material.BRDF
 
         public float Diffuse(Vector3 wi, Vector3 wo)
         {
-            return coeff; /// MathF.PI;
+            return coeff / MathF.PI;
         }
 
         public float Sample(HitResult hitResult, out Vector3 wi)

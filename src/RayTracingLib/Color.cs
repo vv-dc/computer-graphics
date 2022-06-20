@@ -56,9 +56,9 @@ namespace RayTracingLib
         );
 
         public Color Normalize() => new Color(
-            (byte)(r * 255),
-            (byte)(g * 255),
-            (byte)(b * 255)
+            (byte)(MathF.Min(r, 1) * 255),
+            (byte)(MathF.Min(g, 1) * 255),
+            (byte)(MathF.Min(b, 1) * 255)
         );
     }
 }

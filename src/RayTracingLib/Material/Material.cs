@@ -14,6 +14,6 @@ namespace RayTracingLib.Material
 
         public abstract Color Diffuse(Vector3 wi, Vector3 wo);
 
-        public abstract float Scatter(HitResult hitResult, out Vector3 wi);
+        public abstract float Reflect(HitResult hitResult, out Vector3 wi);
     }
 }

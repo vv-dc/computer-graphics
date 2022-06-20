@@ -18,7 +18,7 @@ namespace RayTracingLib.Material
             return this.Color * brdf.Diffuse(wi, wo);
         }
 
-        public override float Scatter(HitResult hitResult, out Vector3 wi)
+        public override float Reflect(HitResult hitResult, out Vector3 wi)
         {
             return brdf.Sample(hitResult, out wi);
         }
