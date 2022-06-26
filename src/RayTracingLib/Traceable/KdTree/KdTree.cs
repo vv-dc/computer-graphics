@@ -5,16 +5,16 @@ namespace RayTracingLib.Traceable.KdTree
     public class KdTree : ITraceable
     {
         private const int MIN_NODES = 1024;
+        private const int SPLIT_RETRIES = 2; // from 0 to 2
 
         private List<ITreeTraceable> prims;
         private AABB bounds;
         private List<KdTreeNode> nodes;
         private INodeSplitter splitter;
-        private int nextFreeNode;
         private int maxDepth;
         private int maxPrims;
 
-        public KdTree(List<ITreeTraceable> prims, INodeSplitter splitter, int maxDepth = int.MaxValue, int maxPrims = 1)
+        public KdTree(List<ITreeTraceable> prims, INodeSplitter splitter, int maxDepth = int.MaxValue, int maxPrims = 8)
         {
             this.prims = prims;
             this.splitter = splitter;
@@ -37,18 +37,18 @@ namespace RayTracingLib.Traceable.KdTree
             foreach (var prim in prims)
             {
                 var primBounds = prim.GetAABB();
-                this.bounds = this.bounds is null
+                bounds = bounds is null
                     ? primBounds
-                    : AABB.Union(this.bounds, primBounds);
+                    : AABB.Union(bounds, primBounds);
 
                 primsBounds.Add(primBounds);
             }
 
             nodes = new List<KdTreeNode>(MIN_NODES);
-            nextFreeNode = -1;
+            var nextFreeNode = -1;
 
-            var next = new Stack<(AABB, List<int>, int, int)>();
-            next.Push((this.bounds, idxs, -1, 0));
+            var next = new Stack<(AABB, List<int>, int, int)>(maxDepth);
+            next.Push((bounds, idxs, -1, 0));
 
             while (next.Count > 0)
             {
@@ -63,10 +63,21 @@ namespace RayTracingLib.Traceable.KdTree
                     nodes.Add(KdTreeNode.InitLeaf(primIdxs));
                     continue;
                 }
-                splitter.Init(bounds, primIdxs, primsBounds);
 
+                splitter.Init(bounds, primIdxs, primsBounds);
                 var axis = (int)bounds.MaximumExtent();
-                if (!splitter.Split(axis, out var splitPos))
+                var splitted = splitter.Split(axis, out var splitPos);
+
+                if (!splitted && SPLIT_RETRIES > 0)
+                {
+                    for (int retry = 0; retry < SPLIT_RETRIES; ++retry)
+                    {
+                        axis = (axis + 1) % 3;
+                        splitted = splitter.Split(axis, out splitPos);
+                        if (splitted) break;
+                    }
+                }
+                if (!splitted)
                 {
                     nodes.Add(KdTreeNode.InitLeaf(primIdxs));
                     continue;
@@ -75,7 +86,7 @@ namespace RayTracingLib.Traceable.KdTree
                 List<int> belowIdxs = new(primIdxs.Count), aboveIdxs = new(primIdxs.Count);
                 foreach (var idx in primIdxs)
                 {
-                    if (primsBounds[idx].Min[axis] <= splitPos)
+                    if (primsBounds[idx].Min[axis] < splitPos)
                     {
                         belowIdxs.Add(idx);
                         if (primsBounds[idx].Max[axis] > splitPos) aboveIdxs.Add(idx);
@@ -101,7 +112,7 @@ namespace RayTracingLib.Traceable.KdTree
             if (!bounds.IntersectP(ray, out tmin, out tmax))
                 return false;
 
-            var next = new Stack<(KdTreeNode, float, float)>();
+            var next = new Stack<(KdTreeNode, float, float)>(maxDepth);
             var node = nodes[0];
             while (node is not null)
             {

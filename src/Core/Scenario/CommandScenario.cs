@@ -34,7 +34,7 @@ namespace Core.Scenario
                     // new PointLight(new Point3(0f, -0.25f, 0f), Color.White),
                     // new PointLight(new Point3(0, 0.5f, 0.4f), Color.White),
                     // new PointLight(new Point3(0, 0.3f, 0.3f), Color.White),
-                    new PointLight(new Point3(-0.3f, 0.25f, 0.3f), Color.White, 3f),
+                    // new PointLight(new Point3(-0.3f, 0.25f, 0.3f), Color.White, 3f),
                     // new EnvironmentalLight(Color.Mirror, 1f),
                     new EnvironmentalLight(Color.Mirror, 0.5f)
                 }
@@ -48,24 +48,24 @@ namespace Core.Scenario
 
             mesh!.Transform(
             // Matrix4x4.CreateTranslation(-16f, -9f, -35f) *
-            // Matrix4x4.CreateTranslation(0, -1f, -2.5f) *
+            Matrix4x4.CreateTranslation(0, -0.3f, 0) *
             Matrix4x4.CreateRotationY(-45 * Consts.DegToRad) *
-            Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
             // Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
-            // Matrix4x4.CreateScale(0.5f)
+            // Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
+            Matrix4x4.CreateScale(0.5f)
             );
 
-            var nodeSplitter = new SAHSplitter();
-            var tree = new KdTree(mesh.GetTraceables(), nodeSplitter, maxPrims: 12, maxDepth: 24);
-            var sceneObject = new RenderableObject(tree, new MirrorMaterial(
-            // Color.White
+            var nodeSplitter = new SAHSplitter(numSplits: 17);
+            var tree = new KdTree(mesh.GetTraceables(), nodeSplitter, maxPrims: 16);
+            var sceneObject = new RenderableObject(tree, new LambertianMaterial(
+            Color.White
             ));
             scene.AddObject(sceneObject);
 
-            var cowSphere = new Sphere(new Point3(-0.1f, 0.6f, -0.3f), 0.2f);
-            scene.AddObject(new RenderableObject(cowSphere, new LambertianMaterial(
-                Color.Red
-            )));
+            // var cowSphere = new Sphere(new Point3(-0.1f, 0.5f, -0.3f), 0.2f);
+            // scene.AddObject(new RenderableObject(cowSphere, new LambertianMaterial(
+            //     Color.Red
+            // )));
 
             // var smallSphere = new Sphere(new Point3(-0.3f, 0.25f, 0.3f), 0.01f);
             // scene.AddObject(new RenderableObject(smallSphere, new LambertianMaterial(
@@ -108,9 +108,8 @@ namespace Core.Scenario
             var tracer = new BasicTracer();
             var shadowTracer = new FirstHitTracer();
 
-            var intensityAdapter = new IntensityShadowAdapter(shadowTracer);
             var adapter = new MaterialAdapter(tracer, shadowTracer);
-            // var adapter = new ColorAdapter(intensityAdapter);
+            // var adapter = new ColorAdapter(shadowTracer);
             var renderer = new ParallelRenderer<Color>(tracer, adapter);
 
             Image<Color>? image = null;

@@ -1,32 +1,48 @@
 namespace RayTracer.Adapter
 {
 
-    using Common;
+    using RayTracer.Tracer;
     using RayTracingLib;
     using RayTracingLib.Light;
 
     public class ColorAdapter : IAdapter<Color>
     {
-        private readonly IAdapter<Intensity> intensityAdapter;
+        private const int NUM_SHADOW_RAYS = 4;
+        private readonly ITracer shadowTracer;
 
-        public ColorAdapter(IAdapter<Intensity> intensityAdapter)
+        public ColorAdapter(ITracer shadowTracer)
         {
-            this.intensityAdapter = intensityAdapter;
+            this.shadowTracer = shadowTracer;
         }
 
         public void Init(List<RenderableObject> sceneObjects)
         {
-            intensityAdapter.Init(sceneObjects);
+            shadowTracer.Init(sceneObjects);
+        }
+
+        private Color ComputeBackgroundColor(List<Light> lights)
+        {
+            return lights.Aggregate(Color.Black, (accum, light) =>
+                light is EnvironmentalLight ? accum + light.color * light.intensity : accum);
         }
 
         public Color Adapt(List<Light> lights, HitResult? hitResult)
         {
-            Intensity intensity = intensityAdapter.Adapt(lights, hitResult);
-            if (Math.Abs(intensity - Intensity.Background) < Consts.EPS)
+            if (hitResult is null) return Color.Steel; // ComputeBackgroundColor(lights);
+            var color = Color.Black;
+
+            foreach (var light in lights)
             {
-                return Color.Steel;
+                var perLightColor = Color.Black;
+                for (int idx = 0; idx < NUM_SHADOW_RAYS; ++idx)
+                {
+                    var shading = light.ComputeShading(hitResult);
+                    var shadowMultiplier = ShadowUtils.ComputeShadowMultiplier(shadowTracer, hitResult, shading);
+                    perLightColor += shading.color * shadowMultiplier / NUM_SHADOW_RAYS;
+                }
+                color += perLightColor;
             }
-            return hitResult!.material.Color * Math.Max(intensity, 0);
+            return hitResult!.material.Color * color;
         }
     }
 }

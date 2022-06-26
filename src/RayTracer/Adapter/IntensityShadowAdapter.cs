@@ -28,14 +28,9 @@ namespace RayTracer.Adapter
             foreach (var light in lights)
             {
                 var shading = light.ComputeShading(hitResult);
-                var current = Vector3.Dot(-shading.direction, hitResult.Normal);
-
-                var hitPoint = hitResult.ray.GetPoint(hitResult.distance) + hitResult.Normal * Consts.SHADOW_EPS;
-                var shadowRay = new Ray(hitPoint, -shading.direction);
-                var hit = shadowTracer.Trace(shadowRay, out var shadowHitResult);
-                intensity += hit ? 0 : current;
+                var shadowMultiplier = ShadowUtils.ComputeShadowMultiplier(shadowTracer, hitResult, shading);
+                intensity += light.intensity * shadowMultiplier;
             }
-
             return intensity;
         }
     }

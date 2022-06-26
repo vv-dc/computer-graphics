@@ -19,7 +19,7 @@ namespace RayTracingLib.Material.BRDF
         public float Sample(HitResult hitResult, out Vector3 wi)
         {
             // var wo = hitResult.ray.direction;
-            wi = hitResult.Normal + Vector3.GetRandomOnHemisphere(hitResult.Normal);
+            wi = Vector3.GetRandomOnHemisphere(hitResult.Normal);
             // return Diffuse(wi, wo);
             return 0f;
         }

@@ -1,6 +1,5 @@
 namespace RayTracer.Adapter
 {
-    using Common;
     using Common.Numeric;
     using RayTracingLib;
     using RayTracingLib.Light;
@@ -39,7 +38,6 @@ namespace RayTracer.Adapter
             {
                 color += ComposeLighting(hitResult, light, REFLECT_THRESHOLD);
             }
-
             return color;
         }
 
@@ -48,8 +46,8 @@ namespace RayTracer.Adapter
             var color = Color.Black;
             foreach (var light in lights)
             {
-                if (light is not EnvironmentalLight) continue;
-                color += light.color * light.intensity;
+                if (light is EnvironmentalLight)
+                    color += light.color * light.intensity;
             }
             return color;
         }
@@ -73,18 +71,9 @@ namespace RayTracer.Adapter
         {
             var direction = hitResult.ray.direction;
             var shading = light.ComputeShading(hitResult);
-            var color = hitResult.material.Diffuse(direction, direction);
-            var shadowMultiplier = GetShadowMultiplier(hitResult, shading);
+            var color = hitResult.material.Diffuse(shading.direction, direction);
+            var shadowMultiplier = ShadowUtils.ComputeShadowMultiplier(shadowTracer, hitResult, shading);
             return color * shadowMultiplier * shading.color;
-        }
-
-        private float GetShadowMultiplier(HitResult hitResult, LightShading shading)
-        {
-            var intensity = Vector3.Dot(-shading.direction, hitResult.Normal);
-            var hitPoint = hitResult.ray.GetPoint(hitResult.distance) + hitResult.Normal * Consts.SHADOW_EPS;
-            var shadowRay = new Ray(hitPoint, -shading.direction);
-            var hit = shadowTracer.Trace(shadowRay, out var shadowHitResult);
-            return hit && shadowHitResult!.distance <= shading.distance ? 0 : Math.Max(intensity, 0);
         }
 
         private Color ComposeReflectLighting(HitResult hitResult, Light light, int depth)

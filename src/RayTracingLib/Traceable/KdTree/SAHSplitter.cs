@@ -71,7 +71,7 @@ namespace RayTracingLib.Traceable.KdTree
                     bestOffset = offset;
                 }
             }
-            if (bestCost > 4 * parentCost)
+            if (bestCost > parentCost)
             {
                 splitPos = 0;
                 return false;

@@ -72,8 +72,7 @@ namespace Core.Scenario
             var tracer = new BasicTracer();
             var shadowTracer = new FirstHitTracer();
 
-            var intensityAdapter = new IntensityShadowAdapter(shadowTracer);
-            var adapter = new ColorAdapter(intensityAdapter);
+            var adapter = new ColorAdapter(shadowTracer);
             var renderer = new BasicRenderer<Color>(tracer, adapter);
             // var renderer = new BasicRenderer<Intensity>(tracer, intensityAdapter);
 

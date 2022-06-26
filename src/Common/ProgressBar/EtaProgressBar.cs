@@ -27,11 +27,11 @@ namespace Common.ProgressBar
 
         public EtaProgressBar(int total, string label) : this(total, label, total / REFRESH_COUNT) { }
 
-        public void Refresh(int value)
+        public void Next(int step = 1)
         {
             lock (locker)
             {
-                current = value;
+                current = Math.Min(current + step, bar.Max);
                 if (current >= updates * refreshRate)
                 {
                     Update(current);
@@ -39,10 +39,6 @@ namespace Common.ProgressBar
                 }
             }
         }
-
-        public void Next(int step) => Refresh(Math.Min(current + step, bar.Max));
-
-        public void Next() => Next(1);
 
         private void Update(int value)
         {
