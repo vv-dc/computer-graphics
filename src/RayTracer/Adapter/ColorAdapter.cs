@@ -1,6 +1,5 @@
 namespace RayTracer.Adapter
 {
-
     using RayTracer.Tracer;
     using RayTracingLib;
     using RayTracingLib.Light;
@@ -28,7 +27,7 @@ namespace RayTracer.Adapter
 
         public Color Adapt(List<Light> lights, HitResult? hitResult)
         {
-            if (hitResult is null) return Color.Steel; // ComputeBackgroundColor(lights);
+            if (hitResult is null) return ComputeBackgroundColor(lights); // Color.Steel;
             var color = Color.Black;
 
             foreach (var light in lights)
@@ -42,7 +41,7 @@ namespace RayTracer.Adapter
                 }
                 color += perLightColor;
             }
-            return hitResult!.material.Color * color;
+            return hitResult!.material.ColorFromUV(hitResult!.uv) * color;
         }
     }
 }

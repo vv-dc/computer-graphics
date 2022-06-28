@@ -7,9 +7,9 @@ namespace RayTracer
     {
         public ITraceable Traceable { get; }
 
-        public Material Material { get; }
+        public IMaterial Material { get; }
 
-        public RenderableObject(ITraceable traceable, Material material)
+        public RenderableObject(ITraceable traceable, IMaterial material)
         {
             Material = material;
             Traceable = traceable;

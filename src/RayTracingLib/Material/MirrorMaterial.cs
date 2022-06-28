@@ -1,26 +1,35 @@
 namespace RayTracingLib.Material
 {
+    using Vector2 = System.Numerics.Vector2;
+
     using Common.Numeric;
-    using RayTracingLib.Light;
     using RayTracingLib.Material.BRDF;
 
-    public class MirrorMaterial : Material
+    public class MirrorMaterial : IMaterial
     {
-        private IBRDF brdf;
+        private readonly Texture<float>? refTexture;
+        private readonly Color color = Color.White;
+        private readonly IBRDF brdf = new MirrorBRDF();
 
-        public MirrorMaterial() : base(Color.White)
+        public MirrorMaterial() { }
+
+        public MirrorMaterial(Texture<float> refTexture)
         {
-            this.brdf = new MirrorBRDF();
+            this.refTexture = refTexture;
         }
 
-        public override Color Diffuse(Vector3 wi, Vector3 wo)
+        public Color ColorFromUV(Vector2 uv) => color;
+
+        public Color Diffuse(HitResult hitResult, Vector3 wi)
         {
-            return this.Color * brdf.Diffuse(wi, wo);
+            var wo = hitResult.ray.direction;
+            return ColorFromUV(hitResult.uv) * brdf.Diffuse(wi, wo);
         }
 
-        public override float Reflect(HitResult hitResult, out Vector3 wi)
+        public float Reflect(HitResult hitResult, out Vector3 wi)
         {
-            return brdf.Sample(hitResult, out wi);
+            var factor = refTexture is not null ? refTexture.GetFromUV(hitResult.uv) : 1.0f;
+            return factor * brdf.Sample(hitResult, out wi);
         }
     }
 }

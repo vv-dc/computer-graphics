@@ -1,7 +1,6 @@
 namespace RayTracer.Tracer
 {
     using RayTracingLib;
-    using RayTracingLib.Traceable;
 
     public class FirstHitTracer : ITracer
     {

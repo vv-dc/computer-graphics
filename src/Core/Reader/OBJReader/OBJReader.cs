@@ -16,22 +16,17 @@ namespace Core.Reader.OBJReader
 
         public IMesh Read(Scene scene, string path)
         {
-            return ParseObjects(path);
-        }
-
-        private IMesh ParseObjects(string path)
-        {
             OBJMesh state = new OBJMesh();
+            var entityTypes = provider.GetEntityTypes();
 
             foreach (string line in GetLinesIterator(path))
             {
-                if (line.StartsWith("#")) continue; // skip comment
+                if (!entityTypes.Any(entityType => line.StartsWith(entityType))) continue;
                 string[] parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                 IOBJParser? parser = GetParserNullable(parts);
                 parser?.Parse(parts, state);
             }
-
             return state;
         }
 
@@ -42,7 +37,6 @@ namespace Core.Reader.OBJReader
 
         private IOBJParser? GetParserNullable(string[] parts)
         {
-            if (parts.Length == 0) return null;
             string entityType = parts[0];
             return provider.GetObjParserNullable(entityType);
         }

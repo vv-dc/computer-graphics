@@ -30,13 +30,8 @@ namespace Core.Scenario
             {
                 lights = new List<Light> {
                     new DirectionalLight(new Vector3(1, -1, -1), Color.White),
-                    // new DirectionalLight(new Vector3(0, -1, 0), new Color(1, 1, 1)),
-                    // new PointLight(new Point3(0f, -0.25f, 0f), Color.White),
-                    // new PointLight(new Point3(0, 0.5f, 0.4f), Color.White),
-                    // new PointLight(new Point3(0, 0.3f, 0.3f), Color.White),
                     // new PointLight(new Point3(-0.3f, 0.25f, 0.3f), Color.White, 3f),
-                    // new EnvironmentalLight(Color.Mirror, 1f),
-                    new EnvironmentalLight(Color.Mirror, 0.5f)
+                    new EnvironmentalLight(Color.Mirror, 1.5f)
                 }
             };
 
@@ -47,25 +42,34 @@ namespace Core.Scenario
             Timer.LogTime(() => mesh = objReader.Read(scene, source!), "Read");
 
             mesh!.Transform(
-            // Matrix4x4.CreateTranslation(-16f, -9f, -35f) *
-            Matrix4x4.CreateTranslation(0, -0.3f, 0) *
+            Matrix4x4.CreateTranslation(0, -0.3f, 0.1f) *
             Matrix4x4.CreateRotationY(-45 * Consts.DegToRad) *
-            // Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
-            // Matrix4x4.CreateRotationX(-90 * Consts.DegToRad)
-            Matrix4x4.CreateScale(0.5f)
+            Matrix4x4.CreateRotationX(-90 * Consts.DegToRad) *
+            Matrix4x4.CreateScale(0.01f)
             );
 
-            var nodeSplitter = new SAHSplitter(numSplits: 17);
-            var tree = new KdTree(mesh.GetTraceables(), nodeSplitter, maxPrims: 16);
+            var nodeSplitter = new SAHSplitter();
+            var tree = new KdTree(mesh.GetTraceables(), nodeSplitter, maxPrims: 8);
+            // var meshTexture = new Texture<Color>(new Color[,] {
+            //     { Color.Black, Color.Red },
+            //     { Color.Blue, Color.Purple },
+            // });
+            // var meshTexture = new Texture<float>(new float[,] {
+            //     { 0.5f, 1 },
+            //     { 1, 0.5f },
+            // });
+            var texturePath = "/Users/dmytro.shkarupa/Documents/kpi/semester6/computer-graphics/textures/chess-board.png";
+            var meshTexture = Texture<Color>.FromImage(texturePath);
+
             var sceneObject = new RenderableObject(tree, new LambertianMaterial(
-            Color.White
+            meshTexture // Color.White
             ));
             scene.AddObject(sceneObject);
 
-            // var cowSphere = new Sphere(new Point3(-0.1f, 0.5f, -0.3f), 0.2f);
-            // scene.AddObject(new RenderableObject(cowSphere, new LambertianMaterial(
-            //     Color.Red
-            // )));
+            var upSphere = new Sphere(new Point3(-0.1f, 0.6f, -0.3f), 0.2f);
+            scene.AddObject(new RenderableObject(upSphere, new MirrorMaterial(
+            // Color.Red
+            )));
 
             // var smallSphere = new Sphere(new Point3(-0.3f, 0.25f, 0.3f), 0.01f);
             // scene.AddObject(new RenderableObject(smallSphere, new LambertianMaterial(

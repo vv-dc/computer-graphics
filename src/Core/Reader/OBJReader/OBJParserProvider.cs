@@ -10,12 +10,15 @@ namespace Core.Reader.OBJReader
         {
             { "f", new FaceParser() },
             { "v", new VertexParser() },
-            { "vn", new NormalParser() }
+            { "vn", new NormalParser() },
+            { "vt", new TextureParser() }
         };
 
         public IOBJParser? GetObjParserNullable(string type)
         {
             return parsersMap.TryGetValue(type, out var value) ? value : null;
         }
+
+        public List<string> GetEntityTypes() => parsersMap.Keys.ToList();
     }
 }

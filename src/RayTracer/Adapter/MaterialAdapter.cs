@@ -9,9 +9,9 @@ namespace RayTracer.Adapter
     {
         private const int REFLECT_THRESHOLD = 6;
 
-        private const float REFLECT_BIAS = 0.00001f;
+        private const float REFLECT_BIAS = 1e-5f;
 
-        private const int DIFFUSE_SAMPLES = 4;
+        private const int NUM_SHADOW_RAYS = 4;
 
         private ITracer tracer;
 
@@ -32,23 +32,15 @@ namespace RayTracer.Adapter
         public Color Adapt(List<Light> lights, HitResult? hitResult)
         {
             if (hitResult is null) return ComposeEnviromentalLighting(lights);
-            var color = Color.Black;
-
-            foreach (var light in lights)
-            {
-                color += ComposeLighting(hitResult, light, REFLECT_THRESHOLD);
-            }
+            var color = lights.Aggregate(Color.Black, (color, light) =>
+                color + ComposeLighting(hitResult, light, REFLECT_THRESHOLD));
             return color;
         }
 
         private Color ComposeEnviromentalLighting(List<Light> lights)
         {
-            var color = Color.Black;
-            foreach (var light in lights)
-            {
-                if (light is EnvironmentalLight)
-                    color += light.color * light.intensity;
-            }
+            var color = lights.Aggregate(Color.Black, (color, light) =>
+                light is EnvironmentalLight ? color + light.color * light.intensity : color);
             return color;
         }
 
@@ -60,18 +52,18 @@ namespace RayTracer.Adapter
         private Color ComposeDiffuseLighting(HitResult hitResult, Light light)
         {
             var totalColor = Color.Black;
-            for (int idx = 0; idx < DIFFUSE_SAMPLES; ++idx)
+            for (int idx = 0; idx < NUM_SHADOW_RAYS; ++idx)
             {
-                totalColor += GetDiffuseLighting(hitResult, light);
+                totalColor += GetDiffuseLighting(hitResult, light) / NUM_SHADOW_RAYS;
             }
-            return totalColor / DIFFUSE_SAMPLES;
+            return totalColor;
         }
 
         private Color GetDiffuseLighting(HitResult hitResult, Light light)
         {
             var direction = hitResult.ray.direction;
             var shading = light.ComputeShading(hitResult);
-            var color = hitResult.material.Diffuse(shading.direction, direction);
+            var color = hitResult.material.Diffuse(hitResult, -shading.direction);
             var shadowMultiplier = ShadowUtils.ComputeShadowMultiplier(shadowTracer, hitResult, shading);
             return color * shadowMultiplier * shading.color;
         }
@@ -80,13 +72,13 @@ namespace RayTracer.Adapter
         {
             if (depth == 0) return Color.Black;
 
-            var attenuation = hitResult.material.Reflect(hitResult, out var wi);
-            var composed = attenuation > 0
-                ? ReflectRay(hitResult, wi, light, depth) * attenuation
+            var reflectionFactor = hitResult.material.Reflect(hitResult, out var wi);
+            var composed = reflectionFactor > 0
+                ? ReflectRay(hitResult, wi, light, depth) * reflectionFactor
                 : Color.Black;
 
             var shading = light.ComputeShading(hitResult);
-            return hitResult.material.Color * composed;
+            return hitResult.material.ColorFromUV(hitResult.uv) * composed;
         }
 
         private Color ReflectRay(HitResult hitResult, Vector3 wi, Light light, int depth)
@@ -104,7 +96,7 @@ namespace RayTracer.Adapter
             }
 
             var lightIntensity = light.ComputeIntensity(wi);
-            return hitResult.material.Color * lightIntensity;
+            return hitResult.material.ColorFromUV(hitResult.uv) * lightIntensity;
         }
     }
 }

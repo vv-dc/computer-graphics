@@ -1,5 +1,7 @@
 namespace Core.Reader.OBJReader
 {
+    using Vector2 = System.Numerics.Vector2;
+
     using Common.Numeric;
     using Core.Reader;
     using Core.Reader.OBJReader.Parser;
@@ -9,6 +11,7 @@ namespace Core.Reader.OBJReader
     public class OBJMesh : IMesh
     {
         public readonly List<Point3> points = new();
+        public readonly List<Vector2> uvs = new();
         public readonly List<Vector3> normals = new();
         public readonly List<Parser.Face> faces = new();
 
@@ -47,8 +50,7 @@ namespace Core.Reader.OBJReader
                 points[b.pointIdx],
                 points[c.pointIdx]
             );
-
-            if (a.normalIdx != null && b.normalIdx != null && c.normalIdx != null)
+            if (a.normalIdx is not null && b.normalIdx is not null && c.normalIdx is not null)
             {
                 triangle.SetNormals(
                     normals[(int)a.normalIdx],
@@ -60,7 +62,14 @@ namespace Core.Reader.OBJReader
             {
                 triangle.SetDefaultNormals();
             }
-
+            if (a.uvIdx is not null && b.uvIdx is not null && c.uvIdx is not null)
+            {
+                triangle.SetUV(
+                    uvs[(int)a.uvIdx],
+                    uvs[(int)b.uvIdx],
+                    uvs[(int)c.uvIdx]
+                );
+            }
             return triangle;
         }
 

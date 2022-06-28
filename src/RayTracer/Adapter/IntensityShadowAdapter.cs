@@ -1,7 +1,5 @@
 namespace RayTracer.Adapter
 {
-    using Common;
-    using Common.Numeric;
     using RayTracer.Tracer;
     using RayTracingLib;
     using RayTracingLib.Light;
